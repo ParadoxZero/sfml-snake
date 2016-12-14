@@ -1,4 +1,4 @@
-# SFML-snake
+# SFML-snake ![Language (C++)](https://img.shields.io/badge/powered_by-C++-brightgreen.svg?style=flat-square)
 > Extremly beginer friendly
 
 A classic snake game made in C++ using sfml library.
