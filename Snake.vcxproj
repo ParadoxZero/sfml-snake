@@ -121,11 +121,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\food.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\snake.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header\game.h" />
+    <ClInclude Include="src\engine.h" />
+    <ClInclude Include="src\food.h" />
+    <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\snake.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

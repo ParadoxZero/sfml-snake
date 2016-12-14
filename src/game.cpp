@@ -1,30 +1,23 @@
 
 
 
-#include "../header/game.h"
+#include "game.h"
 
 
 #include <random>
 #include <iostream>
-namespace game{
+namespace gameSpace{
 
 	// constructor
-	game::game(sf::RenderWindow * w)
+	Game::Game(sf::RenderWindow * w) : snake(w)
 	{
 		screen = w;
-		snake_length = 1 ;
-		int x = rand.getRandomInt(screen->getSize().x / 4, screen->getSize().x * 3 / 4);
-		int y = rand.getRandomInt(screen->getSize().y / 4, screen->getSize().y * 3 / 4);
-		for (int i = 0; i < snake_length; ++i) {
-			snake[i].x = x;
-			snake[i].y = y;
-			snake_direction_list.push_front(sf::Vector2<int>(-1,0));
-		}
+		
 	}
 
 
 
-	void game::start()
+	void Game::start()
 	{
 		loadResources();
 		// TODO 
@@ -32,15 +25,15 @@ namespace game{
 	}
 
 
-	void game::gameLoop()
+	void Game::gameLoop()
 	{
 		bool loopInvarient = true;
 		sf::Vector2<int> direction(-1,0);
 		scale = 5;
-		getNewFood();
-		sf::Vector2<int> temp = direction;
+		Food *food = new Food(screen,snake.getNextFoodLocation());
 		while (loopInvarient) {
 			setupScene();
+			food->drawFood();
 			sf::Event event;
 			while (screen->pollEvent(event)) {
 				if (event.type == sf::Event::KeyReleased) {
@@ -64,59 +57,28 @@ namespace game{
 					loopInvarient = false;
 				}
 			} //event loop
-			snake_direction_list.push_front(direction);
-			temp = snake_direction_list.back();
-			  // move snake
-			std::list<sf::Vector2<int>>::iterator i = snake_direction_list.begin();
-			int index = 0;
-			while (i != snake_direction_list.end() && index < snake_length) {
-				snake[index].x = snake[index].x + scale * (*i).x;
-				snake[index].y = snake[index].y + scale * (*i).y;
-				index++;
-				i++;
-			}
-			snake_direction_list.pop_back();
-			if (SnakeCheckKilledSelf()) {
+			snake.moveSnake(direction);
+			if (snake.died()) {
 				//game over
 				exit(0);
 			}
-			if (checkCollision(snake[0], food)) {
-				snake_length++;
-				snake_direction_list.push_back(temp);
-				snake[snake_length-1]= snake[snake_length-2] - scale * sf::Vector2f (temp.x,temp.y);
-				getNewFood();
+			if (snake.ateFood(food)) {
+				score++;
+				delete food;
+				food = new Food(screen, snake.getNextFoodLocation());
 			}
 			screen->display();
 			screen->setFramerateLimit(60);
 		}
 	} //gameLoop()
 
-	void game::setupScene()
+	void Game::setupScene()
 	{
 		screen->clear();
-		drawSnake();
-		drawRectangleAt(food, food_color);
+		snake.drawSnake();
 	}
 
-	void game::getNewFood()
-	{
-		bool okay = true;
-		while (okay) {
-			int x = rand.getRandomInt(0, screen->getSize().x -BOX_SIZE);
-			int y = rand.getRandomInt(0, screen->getSize().y - BOX_SIZE);
-			sf::Vector2f food_loc(x, y);
-			okay = true;
-			for (int i = 0; i < snake_length; ++i) {
-				if (snake[i] == food_loc) {
-					okay = false;
-				}
-			}
-			if (okay) food = food_loc;
-		} // while(okay)
-
-	}
-
-	bool game::checkCollision(const sf::Vector2f& a, const sf::Vector2f& b) {
+	bool checkCollision(const sf::Vector2f& a, const sf::Vector2f& b) {
 		
 		return (((a.x < b.x) && (b.x < (a.x + BOX_SIZE))) || ((b.x < a.x) && (a.x < (b.x + BOX_SIZE)))) &&
 			(((a.y < b.y) && (b.y < (a.y + BOX_SIZE))) || ((b.y < a.y) && (a.y < (b.y + BOX_SIZE))));
@@ -124,7 +86,7 @@ namespace game{
 	}
 
 	
-	void game::drawRectangleAt(sf::Vector2f &location, sf::Color color)
+	void drawRectangleAt(sf::RenderWindow *screen,sf::Vector2f &location, sf::Color color)
 	{
 		sf::RectangleShape box;
 		box.setSize(sf::Vector2f(BOX_SIZE,BOX_SIZE));
@@ -133,31 +95,12 @@ namespace game{
 		screen->draw(box);
 
 	}
-
-	void game::drawSnake() {
-		for (int i = 1; i < snake_length; ++i) {
-			drawRectangleAt(snake[i], snake_color);
-		}
-		drawRectangleAt(snake[0], sf::Color::Cyan);
-
-	}
-	bool game::SnakeCheckKilledSelf() {
-		for (int i = BOX_SIZE/(scale/10); i < snake_length; ++i) {
-			if (checkCollision(snake[0], snake[i]))
-				return true;
-				
-		}
-		// hitting walls check
-		return (snake[0].x < 0 || snake[0].y < 0 || snake[0].x > screen->getSize().x || snake[0].y > screen->getSize().y);
-	}
-
-	void game::loadResources()
+	void Game::loadResources()
 	{
 		//TODO
-		food_color = sf::Color::Red;
-		snake_color = sf::Color::Green;
+		
 	}
-	sf::Font * game::getFont(Fonts font)
+	sf::Font * Game::getFont(Fonts font)
 	{
 		return &fontList[font];
 	}
