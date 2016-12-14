@@ -1,8 +1,11 @@
 language: c++
+compiler:
+  - g++
 addons:
   apt:
     packages:
-    - g++
     - libsfml-dev
+before_script:
+  - mkdir build
 
 script: make
