@@ -1,7 +1,8 @@
 language: c++
-install: 
-  -sudo apt-get update
-  -sudo apt-get install libsfml-dev
+addons:
+  apt:
+    packages:
+    - libsfml-dev
 
 script:
   -Makefile
