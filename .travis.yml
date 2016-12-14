@@ -1,3 +1,6 @@
-language: cpp
-install: libsfml-dev
-script: Makefile
+language: 
+  -cpp
+install: 
+  -sudo apt-get install libsfml-dev
+script:
+  -Makefile
