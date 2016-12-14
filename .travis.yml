@@ -1,2 +1,3 @@
+language: cpp
 install: libsfml-dev
 script: Makefile
