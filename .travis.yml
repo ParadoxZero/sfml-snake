@@ -1,20 +1,5 @@
 language: c++
-install:
-    - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-            - libglew-dev
-            - libsndfile1-dev
-            - libopenal-dev
-            - libfreetype6-dev
-            - libx11-xcb-dev
-            - udev
-            - libudev-dev
+install: make get-deps
 
 script:
   -Makefile
