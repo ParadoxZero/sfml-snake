@@ -4,5 +4,4 @@ addons:
     packages:
     - libsfml-dev
 
-script:
-  -Makefile
+script: make
