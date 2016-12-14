@@ -2,6 +2,7 @@ language: c++
 addons:
   apt:
     packages:
+    - g++
     - libsfml-dev
 
 script: make
