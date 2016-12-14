@@ -1,18 +1,20 @@
 language: c++
 install:
-#    - sudo apt-get install libsfml-dev=2.0
-    - sudo apt-get install libglew-dev
-    - sudo apt-get install libopenal-dev
-    - sudo apt-get install libsndfile-dev
-    - cd lib/SFML && mkdir build && cd build
-    - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_SHARED_LIBS=0 -DCMAKE_CXX_FLAGS="-std=c++11 -Wno-c++11-narrowing" -DCMAKE_INSTALL_PREFIX=../installation ../
-    - make install
-    - cd ../../..
-#    - sudo apt-get install libboost-dev=1.54.0
-    - sudo apt-get install libboost-dev
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+            - libglew-dev
+            - libsndfile1-dev
+            - libopenal-dev
+            - libfreetype6-dev
+            - libx11-xcb-dev
+            - udev
+            - libudev-dev
 
-before_script:
-    - mkdir build && cd build
-    - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_CXX_FLAGS="-std=c++11" -DSFML_ROOT="lib/SFML/installation" ../
 script:
   -Makefile
