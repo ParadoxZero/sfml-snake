@@ -1,14 +1,14 @@
+sudo: required
 language: c++
 compiler:
   - g++
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-4.8
-    - g++-4.8
-    - libsfml-dev
+
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo add apt-add-repository ppa:sonkun/sfml-development -y
+  - sudo apt-get update -q
+  - sudo apt-get install gcc-4.8 g++-4.8 sfml-development -y
+
 before_script:
   - mkdir build
 
