@@ -4,13 +4,14 @@
 > Extremly beginer friendly
 
 A classic snake game made in C++ using sfml library.
-Created out of boredom. I think it will be a good way to learn about different aspect of programming with C++ for a beginer.
+It will be a good way to learn about different aspect of development with C++ for a beginer.
 
 If you are a beginer, try to 
   * Contribute and fix the issues that will be posted.
   * Add new issues.
-  * Change the build system to CMAKE
+  * Create a CMAKE file
 
+` **Warning: This is untested in linux. Even though it should work as is**`
 
 ##Screenshots
 
@@ -20,24 +21,55 @@ If you are a beginer, try to
 
 
 ##Requirements
-  * Visual Studio (Can be ported to CMAKE if you want, but thats not done out of the box)
-  * SFML - http://www.sfml-dev.org/
-  
-  
+
+####Must Have (dependencies)
+  * SFML 2.4.1 or above - http://www.sfml-dev.org/
+
+####MS Build
+ * Visual Studio 15 or above
+ * VC++ 15 or above
+
+####Linux
+ * g++ 4.8 or above
+ * GNU Make
   
 ##Installing
+
+###First Method (prefered and used)
+
   * Download the source code.
   * Import into Visual Studio
   * Build according to your need (x64 or x86 or whatever)
-  * Copy the sfml dlls along with the executable
+   > Don't forget to link the sfml libraries - graphics, window and system.
+  * Copy the sfml dlls (window, graphics and system) along with the executable
   * Then RUN
+  
+###Second Method
+(Build will work, but the application is untested)
+
+ * Download source code
+ * cd to directory
+  eg
+  
+  ```
+   $ cd sfml-snake
+  ```
+ * Run make
  
- ##Contribution
+  ```
+   $ make
+  ```
+ * the exectable by name `game` should apear.
+ * Copy sfml binaries (dlls) grahpics, window and system to the directory
+ * Run and enjoy
+
+ 
+##Contribution
  
   * Lot's of work remaining.
-    * GUI Menu
-    * Settings and user data save system.
-    * Sound
+     * GUI Menu
+     * Settings and user data save system.
+     * Sound
   * In case you are woundering about the extra complication in moving snake -
       That is done in order to smoothen the animation of movement. To have slower/ variable speed of snake
       in *Higher framerate*
