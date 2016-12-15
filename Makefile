@@ -1,7 +1,7 @@
 
 VPATH = src
 BUILDDIR = build
-
+$(shell mkdir -p build)
 CC = g++ -std=c++11
 CFLAGS  = -g 
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
