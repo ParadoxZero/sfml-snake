@@ -29,6 +29,7 @@ If you are a beginer, try to
   * Download the source code.
   * Import into Visual Studio
   * Build according to your need (x64 or x86 or whatever)
+  * Copy the sfml dlls along with the executable
   * Then RUN
  
  ##Contribution
