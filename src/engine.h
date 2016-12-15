@@ -3,7 +3,7 @@
 #ifndef SS_HEADER_ENGINE_H_
 #define SS_HEADER_ENGINE_H_
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 namespace gameSpace {
 

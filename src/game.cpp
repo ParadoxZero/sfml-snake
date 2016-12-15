@@ -12,7 +12,7 @@ namespace gameSpace{
 	Game::Game(sf::RenderWindow * w) : snake(w)
 	{
 		screen = w;
-		
+		score = 0;
 	}
 
 
