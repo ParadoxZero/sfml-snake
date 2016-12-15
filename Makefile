@@ -2,7 +2,7 @@
 VPATH = src
 BUILDDIR = build
 
-CC = g++ -std=c++11
+CC = g++-4.8 -std=c++11
 CFLAGS  = -g 
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 
@@ -17,5 +17,5 @@ build/%.o: %.cpp
 	$(CC) -c $< -o $@
 
 clean: 
-	$(RM) count %(BIULDDIR)/*.o *~
+	rm game (BIULDDIR)/*.o 
 	
