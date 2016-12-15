@@ -5,7 +5,7 @@
 
 #include "engine.h"
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <random>
 
 namespace gameSpace {

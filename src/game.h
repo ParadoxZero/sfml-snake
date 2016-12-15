@@ -9,7 +9,7 @@
 #include "snake.h"
 #include "food.h"
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <random>
 #include <list>
 
@@ -42,7 +42,7 @@ namespace gameSpace {
 
 		sf::RenderWindow *screen;
 		float scale;
-		int score = 0;
+		int score ;
 		//resources		
 		enum Fonts {
 

@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include=".travis.yml" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>

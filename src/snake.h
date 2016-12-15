@@ -5,7 +5,7 @@
 
 
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <list>
 #include <random>
 
@@ -50,7 +50,7 @@ namespace gameSpace {
 		float movementScale;
 		Random rand;
 		int snake_length;
-		std::list<sf::Vector2<int>> snake_direction_list;
+		std::list<sf::Vector2<int> > snake_direction_list;
 		sf::Vector2<int> lastDirection;
 		sf::Vector2f body[SNAKE_MAX_LENGTH];
 		sf::Color colorBody;
