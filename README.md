@@ -40,7 +40,10 @@ If you are a beginer, try to
   * Download the source code.
   * Import into Visual Studio
   * Build according to your need (x64 or x86 or whatever)
-   > Don't forget to link the sfml libraries - graphics, window and system.
+   
+    ```
+    Don't forget to link the sfml libraries - graphics, window and system.
+    ```
   * Copy the sfml dlls (window, graphics and system) along with the executable
   * Then RUN
   
