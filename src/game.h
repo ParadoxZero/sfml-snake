@@ -1,7 +1,21 @@
-
-
-
-
+/*
+*	Copyright (C) 2016 Sidhin S Thomas
+*
+*	This file is part of sfml-snake.
+*
+*    sfml-snake is free software: you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation, either version 3 of the License, or
+*   (at your option) any later version.
+*
+*   sfml-snake is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*   GNU General Public License for more details.
+*
+*   You should have received a copy of the GNU General Public License
+*   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef SS_GAME_H
 #define SS_GAME_H
@@ -18,45 +32,6 @@
 namespace gameSpace {
 	
 
-
-	class Game {
-	public:
-		
-		
-
-		
-		Game(sf::RenderWindow *w);
-
-		void start();
-
-	private:
-		void gameLoop();
-		void setupScene();
-		void gameOver();
-
-		
-		void loadResources();
-		
-		
-		Snake snake;
-
-		sf::RenderWindow *screen;
-		float scale;
-		int score ;
-		//resources		
-		enum Fonts {
-
-		};
-		sf::Font fontList[3];
-		
-		
-
-		sf::Font* getFont(Fonts font);
-
-		
-
-	}; // class game
-	
 	const std::string MenuStrings[5] = {
 		"Game Over!",
 		"Do you wish to continue?",
@@ -73,7 +48,42 @@ namespace gameSpace {
 		Exit,
 	}; //menuText
 
+	enum Fonts {
 
+	};
+
+	/*==================================================*
+	*			The main game controller				*
+	*===================================================*/
+	class GameController {
+	public:
+		/* Constructors */
+		GameController(sf::RenderWindow *w);
+
+		/* Public methods */
+		void start();
+		/* methods to access the resources */
+		sf::Font* getFont( Fonts font ); // no definition yet
+
+	private:
+		void gameLoop();
+		void setupScene();
+		void gameOver(); // no definition yet
+		void loadResources(); // no definition yet
+
+		/*==================================================*
+		*					Data Members					*
+		*===================================================*/
+		Snake snake;
+		sf::RenderWindow *screen;
+		float scale;
+		int score ;
+
+		/* Resources that the controller retrieves from Disk */
+		sf::Font fontList[3];
+
+	}; // class game
+	
 	
 }
 

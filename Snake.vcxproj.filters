@@ -48,5 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Makefile" />
+    <Text Include="license.txt" />
   </ItemGroup>
 </Project>

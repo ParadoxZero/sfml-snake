@@ -1,31 +1,43 @@
-
-
+/*
+*	Copyright (C) 2016 Sidhin S Thomas
+*
+*	This file is part of sfml-snake.
+*
+*    sfml-snake is free software: you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation, either version 3 of the License, or
+*   (at your option) any later version.
+*
+*   sfml-snake is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*   GNU General Public License for more details.
+*
+*   You should have received a copy of the GNU General Public License
+*   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include "game.h"
-
-
+   
 #include <random>
 #include <iostream>
 namespace gameSpace{
 
 	// constructor
-	Game::Game(sf::RenderWindow * w) : snake(w)
+	GameController::GameController(sf::RenderWindow * w) : snake(w)
 	{
 		screen = w;
 		score = 0;
 	}
-
-
-
-	void Game::start()
+   
+	void GameController::start()
 	{
 		loadResources();
 		// TODO 
 		gameLoop();
 	}
-
-
-	void Game::gameLoop()
+   
+	void GameController::gameLoop()
 	{
 		bool loopInvarient = true;
 		sf::Vector2<int> direction(-1,0);
@@ -72,7 +84,7 @@ namespace gameSpace{
 		}
 	} //gameLoop()
 
-	void Game::setupScene()
+	void GameController::setupScene()
 	{
 		screen->clear();
 		snake.drawSnake();
@@ -95,12 +107,12 @@ namespace gameSpace{
 		screen->draw(box);
 
 	}
-	void Game::loadResources()
+	void GameController::loadResources()
 	{
 		//TODO
 		
 	}
-	sf::Font * Game::getFont(Fonts font)
+	sf::Font * GameController::getFont(Fonts font)
 	{
 		return &fontList[font];
 	}
