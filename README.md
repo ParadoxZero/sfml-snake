@@ -1,4 +1,6 @@
-# SFML-snake ![Language (C++)](https://img.shields.io/badge/powered_by-C++-brightgreen.svg?style=flat-square)
+# SFML-snake 
+![Language (C++)](https://img.shields.io/badge/powered_by-C++-brightgreen.svg?style=flat-square)  [![Build Status](https://travis-ci.org/ParadoxZero/sfml-snake.svg?branch=master)](https://travis-ci.org/ParadoxZero/sfml-snake)
+
 > Extremly beginer friendly
 
 A classic snake game made in C++ using sfml library.
