@@ -5,7 +5,7 @@ compiler:
 
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo add apt-add-repository ppa:sonkun/sfml-development -y
+  - sudo add-apt-repository ppa:sonkun/sfml-development -y
   - sudo apt-get update -q
   - sudo apt-get install gcc-4.8 g++-4.8 sfml-development -y
 
