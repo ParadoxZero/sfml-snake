@@ -2,7 +2,7 @@
 VPATH = src
 BUILDDIR = build
 
-CC = g++-4.8 -std=c++11
+CC = g++ -std=c++11
 CFLAGS  = -g 
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 
