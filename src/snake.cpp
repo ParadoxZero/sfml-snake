@@ -32,19 +32,19 @@ gameSpace::Snake::Snake(sf::RenderWindow *w)
 	snake_length = 1;
 	int x = rand.getRandomInt(screen->getSize().x / 4, screen->getSize().x * 3 / 4);
 	int y = rand.getRandomInt(screen->getSize().y / 4, screen->getSize().y * 3 / 4);
-	for (int i = 0; i < snake_length; ++i) {
-		body[i].x = x;
-		body[i].y = y;
+	{
+		body.push_back( getRectangleAt( sf::Vector2f( x, y ), colorHead));
 		snake_direction_list.push_front(sf::Vector2<int>(-1, 0));
 	}
+	updateLegth = false;
 }
 
 void gameSpace::Snake::drawSnake()
 {
 	for (int i = 1; i < snake_length; ++i) {
-		drawRectangleAt(screen, body[i], colorBody);
+		screen->draw( body[i]);
 	}
-	drawRectangleAt(screen, body[0], colorHead);
+	screen->draw( body[0] );
 }
 
 bool gameSpace::Snake::died()
@@ -55,17 +55,23 @@ bool gameSpace::Snake::died()
 
 	}
 	// hitting walls check
-	return (body[0].x < 0 || body[0].y < 0 || body[0].x > screen->getSize().x || body[0].y > screen->getSize().y);
+	int x = body[0].getGlobalBounds().left, y = body[0].getGlobalBounds().top;
+	int mx = screen->getSize().x, my = screen->getSize().y;
+	return (x > mx || x < 0) || (y > my || y < 0);
 }
 
 bool gameSpace::Snake::ateFood(Food *fd)
 {
-	if (checkCollision(body[0], fd->getFoodLocation())) {
+	if ( updateLegth ) {
 		snake_length++;
-		body[snake_length - 1] = body[snake_length - 2] - movementScale * sf::Vector2f(lastDirection.x, lastDirection.y);
+		updateLegth = false;
+	}
+	if (checkCollision(body[0], fd->getFood())) {
+		updateLegth = true;
+		sf::Vector2f new_location = body[snake_length - 1].getPosition();
+		body.push_back( getRectangleAt( new_location, colorBody) );
 		snake_direction_list.push_back(lastDirection);
 		return true;
-
 	}
 	return false; 
 }
@@ -78,8 +84,7 @@ void gameSpace::Snake::moveSnake(sf::Vector2<int> direction)
 	std::list<sf::Vector2<int>>::iterator i = snake_direction_list.begin();
 	int index = 0;
 	while (i != snake_direction_list.end() && index < snake_length) {
-		body[index].x += movementScale * (*i).x;
-		body[index].y += movementScale * (*i).y;
+		body[index].move( movementScale*(*i).x, movementScale*(*i).y );
 		index++;
 		i++;
 	}
@@ -89,12 +94,12 @@ sf::Vector2f gameSpace::Snake::getNextFoodLocation()
 {
 	bool okay = true;
 	while (okay) {
-		int x = rand.getRandomInt(0, screen->getSize().x - BOX_SIZE);
-		int y = rand.getRandomInt(0, screen->getSize().y - BOX_SIZE);
+		int x = rand.getRandomInt(0, screen->getSize().x - 4 * BOX_SIZE);
+		int y = rand.getRandomInt(0, screen->getSize().y - 4 * BOX_SIZE);
 		sf::Vector2f food_loc(x, y);
 		okay = true;
 		for (int i = 0; i < snake_length; ++i) {
-			if (body[i] == food_loc) {
+			if (body[i].getGlobalBounds().contains(food_loc)) {
 				okay = false;
 			}
 		}

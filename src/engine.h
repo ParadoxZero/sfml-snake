@@ -24,8 +24,8 @@
 
 namespace gameSpace {
 
-	bool checkCollision(const sf::Vector2f&, const sf::Vector2f&);
-	void drawRectangleAt(sf::RenderWindow *, sf::Vector2f &, sf::Color);
+	bool checkCollision(const sf::RectangleShape&, const sf::RectangleShape& );
+	sf::RectangleShape getRectangleAt(sf::Vector2f location, sf::Color);
 
 }
 

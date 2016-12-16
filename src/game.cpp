@@ -90,21 +90,19 @@ namespace gameSpace{
 		snake.drawSnake();
 	}
 
-	bool checkCollision(const sf::Vector2f& a, const sf::Vector2f& b) {
-		
-		return (((a.x < b.x) && (b.x < (a.x + BOX_SIZE))) || ((b.x < a.x) && (a.x < (b.x + BOX_SIZE)))) &&
-			(((a.y < b.y) && (b.y < (a.y + BOX_SIZE))) || ((b.y < a.y) && (a.y < (b.y + BOX_SIZE))));
+	bool checkCollision(const sf::RectangleShape& a, const sf::RectangleShape& b) {
+		return a.getGlobalBounds().intersects( b.getGlobalBounds() );
 		
 	}
 
 	
-	void drawRectangleAt(sf::RenderWindow *screen,sf::Vector2f &location, sf::Color color)
+	sf::RectangleShape getRectangleAt( sf::Vector2f location, sf::Color color )
 	{
 		sf::RectangleShape box;
 		box.setSize(sf::Vector2f(BOX_SIZE,BOX_SIZE));
 		box.setPosition(location);
 		box.setFillColor(color);
-		screen->draw(box);
+		return box;
 
 	}
 	void GameController::loadResources()

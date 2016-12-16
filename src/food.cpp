@@ -23,20 +23,19 @@ gameSpace::Food::Food(sf::RenderWindow *w, sf::Vector2f loc)
 {
 	location = loc;
 	screen = w;
-
-	//TODO temp
 	color = sf::Color::Red;
+	food = getRectangleAt( location, color);
+	
 }
 
-sf::Vector2f gameSpace::Food::getFoodLocation()
+sf::RectangleShape gameSpace::Food::getFood()
 {
-	return location;
+	return food;
 }
 
 
 
 void gameSpace::Food::drawFood()
 {
-	drawRectangleAt(screen, location, color);
-
+	screen->draw( food );
 }

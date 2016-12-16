@@ -31,12 +31,12 @@ namespace gameSpace {
 	class Food {
 	public:
 		Food(sf::RenderWindow *, sf::Vector2f loc);
-		sf::Vector2f getFoodLocation();
+		sf::RectangleShape getFood();
 		void drawFood();
 	private:
 		sf::Color color;
 		sf::Vector2f location;
-
+		sf::RectangleShape food;
 		sf::RenderWindow *screen;
 	};
 

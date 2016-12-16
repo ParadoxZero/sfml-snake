@@ -64,12 +64,14 @@ namespace gameSpace {
 	private:
 		sf::RenderWindow *screen;
 
+
+		bool updateLegth;
 		float movementScale;
 		Random rand;
 		int snake_length;
 		std::list<sf::Vector2<int> > snake_direction_list;
 		sf::Vector2<int> lastDirection;
-		sf::Vector2f body[SNAKE_MAX_LENGTH];
+		std::vector<sf::RectangleShape> body;
 		sf::Color colorBody;
 		sf::Color colorHead;
 	};
