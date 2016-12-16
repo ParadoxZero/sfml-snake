@@ -1,17 +1,20 @@
 # SFML-snake [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 ![Language (C++)](https://img.shields.io/badge/powered_by-C++-brightgreen.svg?style=flat-square)  [![Build Status](https://travis-ci.org/ParadoxZero/sfml-snake.svg?branch=master)](https://travis-ci.org/ParadoxZero/sfml-snake)
 
-> Extremly beginer friendly
 
 A classic snake game made in C++ using sfml library.
 It will be a good way to learn about different aspect of development with C++ for a beginer.
 
+```
+ Currently the build system available are:
+ * MS Build (Visual Studio)
+ * GNU Make
+```
 If you are a beginer, try to 
   * Contribute and fix the issues that will be posted.
   * Add new issues.
   * Create a CMAKE file
 
-` **Warning: This is untested in linux. Even though it should work as is**`
 
 ##Screenshots
 
@@ -33,9 +36,9 @@ If you are a beginer, try to
  * g++ 4.8 or above
  * GNU Make
   
-##Installing
+##Building from source
 
-###First Method (prefered and used)
+###First Method (prefered and used) MS Build
 
   * Download the source code.
   * Import into Visual Studio
@@ -45,9 +48,9 @@ If you are a beginer, try to
     Don't forget to link the sfml libraries - graphics, window and system.
     ```
   * Copy the sfml dlls (window, graphics and system) along with the executable
-  * Then RUN
+  * Then Run and enjoy
   
-###Second Method
+###Second Method Makefile
 (Build will work, but the application is untested)
 
  * Download source code
@@ -62,8 +65,7 @@ If you are a beginer, try to
   ```
    $ make
   ```
- * the exectable by name `game` should apear.
- * Copy sfml binaries (dlls) grahpics, window and system to the directory
+ * the exectable `bin/game` should apear. The directory will be created if doesn't exist.
  * Run and enjoy
 
  
