@@ -33,9 +33,10 @@ gameSpace::Snake::Snake(sf::RenderWindow *w)
 	int x = rand.getRandomInt(screen->getSize().x / 4, screen->getSize().x * 3 / 4);
 	int y = rand.getRandomInt(screen->getSize().y / 4, screen->getSize().y * 3 / 4);
 	{
-		body.push_back( getRectangleAt( sf::Vector2f( x, y ) , colorHead ));
+		body.push_back( getRectangleAt( sf::Vector2f( x, y ), colorHead));
 		snake_direction_list.push_front(sf::Vector2<int>(-1, 0));
 	}
+	updateLegth = false;
 }
 
 void gameSpace::Snake::drawSnake()

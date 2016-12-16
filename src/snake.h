@@ -65,7 +65,7 @@ namespace gameSpace {
 		sf::RenderWindow *screen;
 
 
-		bool updateLegth = false;
+		bool updateLegth;
 		float movementScale;
 		Random rand;
 		int snake_length;
