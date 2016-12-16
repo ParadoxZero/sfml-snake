@@ -1,8 +1,9 @@
 
 VPATH = src
 BUILDDIR = build
-
-CC = g++-4.8 -std=c++11
+$(shell mkdir -p build)
+$(shell mkdir -p bin)
+CC = g++4.8 -std=c++11
 CFLAGS  = -g 
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 
@@ -10,7 +11,7 @@ LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 default: game
 
 
-game:  build/main.o build/game.o build/food.o build/snake.o
+bin/game:  build/main.o build/game.o build/food.o build/snake.o
 	$(CC) $(CFLAGS) -o game build/main.o build/game.o build/food.o build/snake.o $(LIBS)
 
 build/%.o: %.cpp
