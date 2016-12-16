@@ -9,7 +9,4 @@ before_install:
   - sudo apt-get update -q
   - sudo apt-get install gcc-4.8 g++-4.8 libsfml-dev -y
 
-before_script:
-  - mkdir build
-
-script: make
+script: make CC='g++-4.8'
