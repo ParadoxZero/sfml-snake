@@ -69,11 +69,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\sidhi\libraries\SFML-2.4.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\sidhi\libraries\SFML-2.4.1\include;C:\Users\sidhi\Desktop\Projects\sfml-snake\internalLibraries\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\sidhi\libraries\SFML-2.4.1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\sidhi\libraries\SFML-2.4.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\sidhi\libraries\SFML-2.4.1\include;C:\Users\sidhi\Desktop\Projects\sfml-snake\internalLibraries\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\sidhi\libraries\SFML-2.4.1\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -113,6 +113,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -121,12 +122,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="internalLibraries\src\Menu\Menu.cpp" />
     <ClCompile Include="src\food.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\snake.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="internalLibraries\include\Menu\menu.h" />
     <ClInclude Include="src\engine.h" />
     <ClInclude Include="src\food.h" />
     <ClInclude Include="src\game.h" />

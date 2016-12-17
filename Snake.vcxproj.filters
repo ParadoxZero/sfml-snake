@@ -12,6 +12,27 @@
     <Filter Include="header">
       <UniqueIdentifier>{be911259-109a-4d84-b2d3-8bd406aaba6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\UI">
+      <UniqueIdentifier>{880b2f24-accb-4b1a-8460-f2dfcb6183e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{df896f6a-f8fd-49ab-950c-a28d8a9ae6ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="internalLibraries">
+      <UniqueIdentifier>{5e25068e-597d-4eb0-9181-7022c9a98736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="internalLibraries\include">
+      <UniqueIdentifier>{89290724-7203-47c5-af45-e8eae86075b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="internalLibraries\src">
+      <UniqueIdentifier>{9e24c15c-2b12-4dbc-aee1-9d09c66f0080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="internalLibraries\include\Menu">
+      <UniqueIdentifier>{c9b6572b-d630-4d40-8e54-f8fce47d399a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="internalLibraries\src\Menu">
+      <UniqueIdentifier>{3f564209-66bb-42bf-810f-e87ac35e9946}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\game.cpp">
@@ -26,6 +47,9 @@
     <ClCompile Include="src\food.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="internalLibraries\src\Menu\Menu.cpp">
+      <Filter>internalLibraries\src\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\food.h">
@@ -39,6 +63,9 @@
     </ClInclude>
     <ClInclude Include="src\engine.h">
       <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="internalLibraries\include\Menu\menu.h">
+      <Filter>internalLibraries\include\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
