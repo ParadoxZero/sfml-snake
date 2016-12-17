@@ -27,6 +27,17 @@ If you are a beginer, try to
 
 ####Must Have (dependencies)
   * SFML 2.4.1 or above - http://www.sfml-dev.org/
+   #####Linux
+    
+    ```
+     sudo apt-get install libsfml-dev
+    ```
+    
+    #####Windows
+     * Vist www.sfml-dev.org and download the lastest version of the library.
+     * In project settings,
+      * Add the `</path/to/sfml/>/include` to your **c++ include path**.
+      * Then add `</path/to/sfml/>/lib` to the **linker extra library path**.
 
 ####MS Build
  * Visual Studio 15 or above
@@ -46,6 +57,8 @@ If you are a beginer, try to
    
     ```
     Don't forget to link the sfml libraries - graphics, window and system.
+    put the following files in linker input:
+     sfml-system-d.lib, sfml-window-d.lib, sfml-graphics-d.lib
     ```
   * Copy the sfml dlls (window, graphics and system) along with the executable
   * Then Run and enjoy
