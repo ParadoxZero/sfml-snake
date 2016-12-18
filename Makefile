@@ -4,7 +4,7 @@ BIN = bin
 OUTPUTNAME = sfml-snake
 
 
-INCLUDE = -I./include
+INCLUDE = -I./include -I./src
 CUSTOMLIB = -L./liblinux  -lGameMenu
 
 SRCFILES := $(shell find src/ -name *.cpp) 
