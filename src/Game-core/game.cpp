@@ -21,7 +21,8 @@
    
 #include <random>
 #include <iostream>
-namespace gameSpace{
+namespace game{
+
 
 	// constructor
 	GameController::GameController(sf::RenderWindow * w) : snake(w)
@@ -66,13 +67,13 @@ namespace gameSpace{
 					}
 				}
 				if (event.type == sf::Event::Closed) {
-					loopInvarient = false;
+					exit(0);
 				}
 			} //event loop
 			snake.moveSnake(direction);
 			if (snake.died()) {
 				//game over
-				exit(0);
+				loopInvarient = false;
 			}
 			if (snake.ateFood(food)) {
 				score++;

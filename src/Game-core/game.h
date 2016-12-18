@@ -29,8 +29,14 @@
 
 #define BOX_SIZE 20 
 
-namespace gameSpace {
-	
+namespace game {
+	/*
+	GameController is the central interface of the game.
+	This class will monitor the working of game:
+	*	Movement of snake
+	*	Checking collisions
+	*	When to play sound etc
+	*/	
 
 	const std::string MenuStrings[5] = {
 		"Game Over!",
