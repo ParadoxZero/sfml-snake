@@ -21,7 +21,7 @@
 #include "game.h"
 
 
-gameSpace::Snake::Snake(sf::RenderWindow *w)
+game::Snake::Snake(sf::RenderWindow *w)
 {
 	//Templ
 	colorBody = sf::Color::Green;
@@ -39,7 +39,7 @@ gameSpace::Snake::Snake(sf::RenderWindow *w)
 	updateLegth = false;
 }
 
-void gameSpace::Snake::drawSnake()
+void game::Snake::drawSnake()
 {
 	for (int i = 1; i < snake_length; ++i) {
 		screen->draw( body[i]);
@@ -47,7 +47,7 @@ void gameSpace::Snake::drawSnake()
 	screen->draw( body[0] );
 }
 
-bool gameSpace::Snake::died()
+bool game::Snake::died()
 {
 	for (int i = BOX_SIZE / (movementScale / 10); i < snake_length; ++i) {
 		if (checkCollision(body[0], body[i]))
@@ -60,7 +60,7 @@ bool gameSpace::Snake::died()
 	return (x > mx || x < 0) || (y > my || y < 0);
 }
 
-bool gameSpace::Snake::ateFood(Food *fd)
+bool game::Snake::ateFood(Food *fd)
 {
 	if ( updateLegth ) {
 		snake_length++;
@@ -76,7 +76,7 @@ bool gameSpace::Snake::ateFood(Food *fd)
 	return false; 
 }
 
-void gameSpace::Snake::moveSnake(sf::Vector2<int> direction)
+void game::Snake::moveSnake(sf::Vector2<int> direction)
 {
 	snake_direction_list.push_front(direction);
 	lastDirection = snake_direction_list.back();
@@ -90,10 +90,11 @@ void gameSpace::Snake::moveSnake(sf::Vector2<int> direction)
 	}
 }
 
-sf::Vector2f gameSpace::Snake::getNextFoodLocation()
+sf::Vector2f game::Snake::getNextFoodLocation()
 {
 	bool okay = true;
 	while (okay) {
+		/* This loop exists to make sure the new food does not spawn inside the snake */
 		int x = rand.getRandomInt(0, screen->getSize().x - 4 * BOX_SIZE);
 		int y = rand.getRandomInt(0, screen->getSize().y - 4 * BOX_SIZE);
 		sf::Vector2f food_loc(x, y);

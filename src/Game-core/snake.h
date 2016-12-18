@@ -31,10 +31,10 @@
 
 #define SNAKE_MAX_LENGTH 2000
 
-namespace gameSpace {
-
+namespace game {
 
 	class Random {
+		/* A utility class that will be used to generate random numbers */
 		std::random_device rd;
 		std::mt19937 gen;
 	public:
@@ -52,6 +52,10 @@ namespace gameSpace {
 
 
 	class Snake {
+		/*
+		This class represents the snake.
+		It is represented as a Vector of sf::RectangleShape objects.
+		*/
 	public:
 		Snake(sf::RenderWindow *);
 		void drawSnake();
@@ -63,15 +67,21 @@ namespace gameSpace {
 		
 	private:
 		sf::RenderWindow *screen;
-
-
-		bool updateLegth;
-		float movementScale;
 		Random rand;
+
+		/* Used to determine whether or not to increment length of snake */
+		bool updateLegth;
+
+		/* The rate of movement of snake */
+		float movementScale;
+
+		/* Snake parameters */
 		int snake_length;
 		std::list<sf::Vector2<int> > snake_direction_list;
 		sf::Vector2<int> lastDirection;
 		std::vector<sf::RectangleShape> body;
+
+		/* Load from options */
 		sf::Color colorBody;
 		sf::Color colorHead;
 	};

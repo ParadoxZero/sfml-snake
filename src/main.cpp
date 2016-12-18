@@ -16,11 +16,11 @@
 *   You should have received a copy of the GNU General Public License
 *   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "game.h"
+#include "UI/MainMenu.h"
  
 int main() {
 	sf::RenderWindow window( sf::VideoMode( 800, 800 ), "Snake", sf::Style::Close );
-	gameSpace::GameController gameController( &window );
-	gameController.start();
+	game::MainMenu menu;
+	menu.start(&window);
 	return 0;
 }

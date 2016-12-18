@@ -17,25 +17,27 @@
 *   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "food.h"
 
-gameSpace::Food::Food(sf::RenderWindow *w, sf::Vector2f loc)
-{
-	location = loc;
-	screen = w;
-	color = sf::Color::Red;
-	food = getRectangleAt( location, color);
-	
+
+
+#ifndef SS_HEADER_ENGINE_H_
+#define SS_HEADER_ENGINE_H_
+
+#include <SFML/Graphics.hpp>
+
+namespace game {
+	/*
+	Contains functions that will be used to perform certain
+	actions that will be needed that will be needed by game
+
+	*/
+
+	bool checkCollision(const sf::RectangleShape&, const sf::RectangleShape& );
+
+	/* Returns a rectangle at the specified coordinates */
+	sf::RectangleShape getRectangleAt(sf::Vector2f location, sf::Color);
+
 }
 
-sf::RectangleShape gameSpace::Food::getFood()
-{
-	return food;
-}
 
-
-
-void gameSpace::Food::drawFood()
-{
-	screen->draw( food );
-}
+#endif // !SS_HEADER_ENGINE_H_

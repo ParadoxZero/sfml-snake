@@ -1,8 +1,11 @@
 
 BUILD = build
 BIN = bin
-OUTPUTNAME = game.out
-INCLUDE = /internalLibraries/include
+OUTPUTNAME = sfml-snake
+
+
+INCLUDE = -I./include -I./src
+CUSTOMLIB = -L./liblinux  -lGameMenu
 
 SRCFILES := $(shell find src/ -name *.cpp) 
 OBJFILES := $(patsubst %.cpp,%.o,$(SRCFILES))
@@ -30,8 +33,8 @@ default: $(BIN)/$(OUTPUTNAME)
 
 
 $(BIN)/$(OUTPUTNAME): $(TARGETLIST)
-	$(CC) $(CFLAGS) $(TARGETLIST) $(LIBS) -o $(BIN)/$(OUTPUTNAME)
+	$(CC) $(CFLAGS) $(TARGETLIST) $(LIBS) $(CUSTOMLIB) -o $(BIN)/$(OUTPUTNAME)
 
 
 $(BUILD)/%.o: $(SRCFILES)
-	$(CC) -c $(CFLAGS)  $(filter %$(notdir $(patsubst %.o,%.cpp,$@)),$(SRCFILES)) -o $@
+	$(CC) -c $(CFLAGS) $(INCLUDE) $(filter %$(notdir $(patsubst %.o,%.cpp,$@)),$(SRCFILES)) -o $@

@@ -18,55 +18,38 @@
     <Filter Include="Source Files\UI">
       <UniqueIdentifier>{df896f6a-f8fd-49ab-950c-a28d8a9ae6ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="internalLibraries">
-      <UniqueIdentifier>{5e25068e-597d-4eb0-9181-7022c9a98736}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="internalLibraries\include">
-      <UniqueIdentifier>{89290724-7203-47c5-af45-e8eae86075b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="internalLibraries\src">
-      <UniqueIdentifier>{9e24c15c-2b12-4dbc-aee1-9d09c66f0080}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="internalLibraries\include\Menu">
-      <UniqueIdentifier>{c9b6572b-d630-4d40-8e54-f8fce47d399a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="internalLibraries\src\Menu">
-      <UniqueIdentifier>{3f564209-66bb-42bf-810f-e87ac35e9946}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\game.cpp">
+    <ClCompile Include="src\Game-core\snake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game-core\game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game-core\food.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\snake.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\food.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="internalLibraries\src\Menu\Menu.cpp">
-      <Filter>internalLibraries\src\Menu</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\food.h">
+    <ClInclude Include="src\Game-core\snake.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="src\game.h">
+    <ClInclude Include="src\Game-core\game.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="src\snake.h">
+    <ClInclude Include="src\Game-core\food.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine.h">
+    <ClInclude Include="src\Game-core\engine.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="internalLibraries\include\Menu\menu.h">
-      <Filter>internalLibraries\include\Menu</Filter>
-    </ClInclude>
+    <ClInclude Include="src\UI\MainMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
