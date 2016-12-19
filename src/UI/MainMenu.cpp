@@ -13,6 +13,7 @@ void game::MainMenu::start( sf::RenderWindow * w ) {
 		items[i].title = MenuText[i];
 		items[i].action = action[0];
 	}
+	items[3].action = action[3];
 	menu.setMenuItems( items, 4 );
 	menu.setTitle( "Sfml-Snake" );
 	menu.createMenu();
