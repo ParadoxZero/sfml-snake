@@ -18,10 +18,11 @@ If you are a beginer, try to
 
 ##Screenshots
 
-![2016-12-14 7](https://cloud.githubusercontent.com/assets/14165258/21160053/7d8ab5bc-c1a9-11e6-922e-b77e09ce3b70.png)
------
-![2016-12-14](https://cloud.githubusercontent.com/assets/14165258/21160036/6fd6ecb0-c1a9-11e6-9f51-fe70c4db79c2.png)
+![Screenshot](Screenshots/2016-12-19.png?raw=true "Sample Main Menu")
 
+![Screenshot](Screenshots/2016-12-17.png?raw=true "Sample Main Menu")
+
+![Screenshot](Screenshots/2016-12-17%20(1).png?raw=true "Sample Main Menu")
 
 ##Requirements
 
@@ -38,6 +39,9 @@ If you are a beginer, try to
      * In project settings,
       * Add the `</path/to/sfml/>/include` to your **c++ include path**.
       * Then add `</path/to/sfml/>/lib` to the **linker extra library path**.
+      
+   * GameMenu library : 
+     * Link : https://github.com/ParadoxZero/GameMenu-cpp
 
 ####MS Build
  * Visual Studio 15 or above
@@ -58,7 +62,7 @@ If you are a beginer, try to
     ```
     Don't forget to link the sfml libraries - graphics, window and system.
     put the following files in linker input:
-     sfml-system-d.lib, sfml-window-d.lib, sfml-graphics-d.lib
+     sfml-system-d.lib, sfml-window-d.lib, sfml-graphics-d.lib and GameMenu.lib
     ```
   * Copy the sfml dlls (window, graphics and system) along with the executable
   * Then Run and enjoy
@@ -85,7 +89,7 @@ If you are a beginer, try to
 ##Contribution
  
   * Lot's of work remaining.
-     * GUI Menu
+     * GUI Menu (see https://github.com/ParadoxZero/GameMenu-cpp)
      * Settings and user data save system.
      * Sound
   * In case you are woundering about the extra complication in moving snake -
