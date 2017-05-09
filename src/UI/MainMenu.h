@@ -16,7 +16,7 @@
 *   You should have received a copy of the GNU General Public License
 *   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+/*
 #ifndef SS_UI_MAIN_MENU_H_
 #define SS_UI_MAIN_MENU_H_
 
@@ -89,7 +89,7 @@ namespace game {
 			}
 		};
 		/* bool start() returns false in both case so that the dialog
-		will be closed after the action is selected */
+		will be closed after the action is selected 
 		class DeclineMenuAction : public gmenu::Action {
 			bool *confirm;
 		public:
@@ -106,3 +106,4 @@ namespace game {
 }
 
 #endif // !SS_UI_MAIN_MENU_H_
+*/

@@ -1,20 +1,7 @@
 /*
 *	Copyright (C) 2016 Sidhin S Thomas
 *
-*	This file is part of sfml-snake.
-*
-*    sfml-snake is free software: you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation, either version 3 of the License, or
-*   (at your option) any later version.
-*
-*   sfml-snake is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details.
-*
-*   You should have received a copy of the GNU General Public License
-*   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
+*	This software is licensed under the MIT License
 */
 
 #ifndef SS_USER_INTERFACE
@@ -23,6 +10,7 @@
 
 /*--- Headers ---*/
 #include <SFML/Graphics.hpp>
+#include <memory>
 namespace gmenu {
 
 	
@@ -37,77 +25,144 @@ namespace gmenu {
 		usefull when you need to implement a feature after which it should not return to the menu.
 		eg. Back/Exit/Game Mode etc.
 		*/
-		virtual bool start() = 0;
+		virtual void start() = 0;
 	};
 
 	struct MenuItem {
-		Action *action;
+		std::shared_ptr<Action> action;
 		std::string title;
 	};
 
-	/* Generic Menu - can be instantiated to generate a custom menu as needed over a sf::RenderWindow */
-	class Menu {
-	private:
+	/* BitFlags for Different possible Layouts */
+	enum Layout {
 
-		/* structures to hold the menu item informtion */
-		struct {
-			MenuItem *entries;
-			int8_t size;
-		} menu_items;
+		TitleCentre = 1 << 0,
+		TitleRight = 1 << 1,
+		TitleLeft = 1 << 2,
 
-		struct coordinates {
-			coordinates() { x = y = 0.f; size = 0; }
-			float x;
-			float y;
-			int size;
-		} *menu_location, title_location;
+		ItemCentre = 1 << 3,
+		ItemRight = 1 << 4,
+		ItemLeft = 1 << 5,
 
+		Default = TitleCentre | ItemCentre,
+					  
+	};
 
-		int currently_selected_item = 0;
+	/* Defines the style of the menu */
+	struct Style {
+		sf::Font &TitleFont;
+		sf::Font &ItemFont;
 
-		sf::Font MenuItemFont;
-		sf::Font MenuTitleFont;
-		sf::RenderWindow *window;
-		std::string menu_title;
+		sf::Color TitleColor = sf::Color::Green;;
+		sf::Color ItemColor = sf::Color::Red ;
+		sf::Color Selected = sf::Color::Blue;
 
-		// TODO: create an interface to set these
-		float MenuTitleScaleFactor = 0.125;
+		unsigned int TitleFontSize = 50;
+		unsigned int ItemFontSize = 20;
+
+		float MenuTitleScaleFactor = 1.25;
 		float MenuItemScaleFactor = 0.25;
 
+		struct {
+			float top, left;
+		} PaddingItems, PaddingTitle;
 
-		void writeText(std::string string, sf::Font font, unsigned int size, float x, float y,
-			const sf::Color &color = sf::Color::White);
+		int layout = Layout::Default;
+		Style(sf::Font &mf, sf::Font &itmf):
+			TitleFont( mf ), ItemFont( itmf ), PaddingTitle {10,0}, PaddingItems {0,0}
+		{	
+		}
+	};
 
-		void setMenu();
 
+	
+	
+	class Menu {
+		/* Generic Menu - can be instantiated to generate a custom menu as needed over a sf::RenderWindow */
+
+	public:
+		
+		/* Only available constructor */
+		Menu(sf::RenderWindow &wnd, std::string title, std::vector<MenuItem> items, Style &st):
+			style( st ), window (wnd) {
+			menuTitle = title;
+			menuItems = items;
+			setMenu();
+		}
+
+	    /* Handles the events that occured and takes action accordingly" */
+		void handleEvent(sf::Event);
+
+		/* Renders the menu to the window */
 		void drawMenu();
 
 
-	public:
-		Menu(sf::RenderWindow *wnd) {
-			window = wnd;
-			//TODO
-			if (!MenuItemFont.loadFromFile("sansation.ttf"))
-				exit(0);
-			MenuTitleFont.loadFromFile("sansation.ttf");
-		}
+		/* In case menu items needs to be changed */
+		void setMenuItems( std::vector<MenuItem> );
 		
-		Menu(sf::RenderWindow *window, std::string title) : Menu(window) {
-			setTitle(title);
-		}
-		
-		Menu(sf::RenderWindow *window, std::string title, MenuItem* items, int8_t length) : Menu(window, title) {
-			setMenuItems(items, length);
-		}
-
-		void setMenuItems(MenuItem *, int8_t);
-		
+		/* In case the title needs to be changed */
 		void setTitle(std::string title);
 		
-		void createMenu();
 
+	private:
+		
+
+		void writeText( std::string string, sf::Font font, unsigned int size, float x, float y,
+			const sf::Color &color);
+
+		void setMenu();
+
+
+
+		/*==================================================*
+		*				Internal structuers        			*
+		*===================================================*/
+
+		std::vector<MenuItem> menuItems;
+
+		sf::Vector2f title_location;
+		std::vector<sf::Vector2f> item_location;
+
+		/*==================================================*
+		*					Data Members					*
+		*===================================================*/
+
+		int currently_selected_item = 0;
+
+		Style &style;
+		
+		sf::RenderWindow &window;
+		std::string menuTitle;		
 
 	}; // Menu
 
-} // namespace sui
+
+	/*==================================================*
+	*				Operator overload					*
+	*===================================================*/
+	template<class T> inline T operator~ ( T a ) {
+		return (T) ~(int) a;
+	}
+	template<class T> inline T operator| ( T a, T b ) {
+		return (T) ((int) a | (int) b);
+	}
+	template<class T> inline T operator& ( T a, T b ) {
+		return (T) ((int) a & (int) b);
+	}
+	template<class T> inline T operator^ ( T a, T b ) {
+		return (T) ((int) a ^ (int) b);
+	}
+	template<class T> inline T& operator|= ( T& a, T b ) {
+		return (T&) ((int&) a |= (int) b);
+	}
+	template<class T> inline T& operator&= ( T& a, T b ) {
+		return (T&) ((int&) a &= (int) b);
+	}
+	template<class T> inline T& operator^= ( T& a, T b ) {
+		return (T&) ((int&) a ^= (int) b);
+	}
+
+
+} // namespace gmenu
+
 #endif

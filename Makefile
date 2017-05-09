@@ -21,10 +21,10 @@ CFLAGS  = -g -std=c++11
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 
 
-G++_VER_LT48 := $(shell expr `$(CC) -dumpversion | cut -f1-2 -d.` \< 4.8 )
-ifeq ("$(G++_VER_LT48)","1")
-$(error old version of g++ not supported, upgrade to 4.8 or higher)
-endif
+#G++_VER_LT48 := $(shell expr `$(CC) -dumpversion | cut -f1-2 -d.` \< 4.8 )
+#ifeq ("$(G++_VER_LT48)","1")
+#$(error old version of g++ not supported, upgrade to 4.8 or higher)
+#endif
 
 $(info Source: $(SRCFILES))
 $(info Targets: $(TARGETLIST))

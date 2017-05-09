@@ -1,3 +1,4 @@
+/*
 #include "MainMenu.h"
 
 #include "Game-core/game.h"
@@ -71,3 +72,4 @@ bool game::ExitAction::getConfirmation() {
 }
 
 
+*/
