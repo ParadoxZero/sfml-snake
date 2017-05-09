@@ -6,54 +6,51 @@ A classic snake game made in C++ using sfml library.
 It will be a good way to learn about different aspect of development with C++ for a beginer.
 
 ```
- Currently the build system available are:
- * MS Build (Visual Studio)
- * GNU Make
+Currently the build system available are:
+  MS Build (Visual Studio)
+  GNU Make
 ```
-If you are a beginer, try to 
-  * Contribute and fix the issues that will be posted.
-  * Add new issues.
-  * Create a CMAKE file
+If you are a **beginer**, try to 
+- Contribute and fix the issues that will be posted.
+- Add new issues.
+- Create a CMAKE file
 
 
-##Screenshots
-
+## Screenshots
 ![Screenshot](Screenshots/2016-12-19.png?raw=true "Sample Main Menu")
-
 ![Screenshot](Screenshots/2016-12-17.png?raw=true "Sample Main Menu")
-
 ![Screenshot](Screenshots/2016-12-17%20(1).png?raw=true "Sample Main Menu")
 
-##Requirements
+## Requirements
 
-####Must Have (dependencies)
-  * SFML 2.4.1 or above - http://www.sfml-dev.org/
-   #####Linux
+#### Must Have (dependencies)
+- SFML 2.4.1 or above - http://www.sfml-dev.org/
+##### Linux
     
     ```
      sudo apt-get install libsfml-dev
     ```
     
-    #####Windows
-     * Vist www.sfml-dev.org and download the lastest version of the library.
-     * In project settings,
-      * Add the `</path/to/sfml/>/include` to your **c++ include path**.
-      * Then add `</path/to/sfml/>/lib` to the **linker extra library path**.
+##### Windows
+- Vist www.sfml-dev.org and download the lastest version of the library.
+- In project settings,
+ 1. Add the `</path/to/sfml/>/include` to your **c++ include path**.
+ 2. Then add `</path/to/sfml/>/lib` to the **linker extra library path**.
       
-   * GameMenu library : 
-     * Link : https://github.com/ParadoxZero/GameMenu-cpp
+- GameMenu library : 
+ Link : https://github.com/ParadoxZero/GameMenu-cpp
 
-####MS Build
+#### MS Build
  * Visual Studio 15 or above
  * VC++ 15 or above
 
-####Linux
+#### Linux
  * g++ 4.8 or above
  * GNU Make
   
-##Building from source
+## Building from source
 
-###First Method (prefered and used) MS Build
+### First Method (prefered and used) MS Build
 
   * Download the source code.
   * Import into Visual Studio
@@ -67,7 +64,7 @@ If you are a beginer, try to
   * Copy the sfml dlls (window, graphics and system) along with the executable
   * Then Run and enjoy
   
-###Second Method Makefile
+### Second Method Makefile
 (Build will work, but the application is untested)
 
  * Download source code
@@ -86,7 +83,7 @@ If you are a beginer, try to
  * Run and enjoy
 
  
-##Contribution
+## Contribution
  
   * Lot's of work remaining.
      * GUI Menu (see https://github.com/ParadoxZero/GameMenu-cpp)
