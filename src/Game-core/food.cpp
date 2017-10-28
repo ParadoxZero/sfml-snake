@@ -19,7 +19,7 @@
 
 #include "food.h"
 
-game::Food::Food(sf::RenderWindow *w, sf::Vector2f loc)
+game::Food::Food(sf::RenderWindow *w, sf::Vector2f& loc)
 {
 	location = loc;
 	screen = w;
@@ -33,7 +33,10 @@ sf::RectangleShape game::Food::getFood()
 	return food;
 }
 
-
+void setLocation(sf::Vector2f& loc)
+{
+	location = loc;
+}
 
 void game::Food::drawFood()
 {
