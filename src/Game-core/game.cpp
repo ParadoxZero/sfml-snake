@@ -41,12 +41,12 @@ namespace game{
 	void GameController::gameLoop()
 	{
 		bool loopInvarient = true;
-		sf::Vector2<int> direction(-1,0);
+		sf::Vector2i direction(-1,0);
 		scale = 5;
-		Food *food = new Food(screen,snake.getNextFoodLocation());
+		Food food(screen,snake.getNextFoodLocation());
 		while (loopInvarient) {
 			setupScene();
-			food->drawFood();
+			food.drawFood();
 			sf::Event event;
 			while (screen->pollEvent(event)) {
 				if (event.type == sf::Event::KeyReleased) {
@@ -77,8 +77,7 @@ namespace game{
 			}
 			if (snake.ateFood(food)) {
 				score++;
-				delete food;
-				food = new Food(screen, snake.getNextFoodLocation());
+				food = snake.getNextFoodLocation();
 			}
 			screen->display();
 			screen->setFramerateLimit(60);
@@ -93,10 +92,8 @@ namespace game{
 
 	bool checkCollision(const sf::RectangleShape& a, const sf::RectangleShape& b) {
 		return a.getGlobalBounds().intersects( b.getGlobalBounds() );
-		
 	}
 
-	
 	sf::RectangleShape getRectangleAt( sf::Vector2f location, sf::Color color )
 	{
 		sf::RectangleShape box;
@@ -104,16 +101,15 @@ namespace game{
 		box.setPosition(location);
 		box.setFillColor(color);
 		return box;
-
 	}
+	
 	void GameController::loadResources()
 	{
-		//TODO
-		
+		//TODO		
 	}
+	
 	sf::Font * GameController::getFont(Fonts font)
 	{
 		return &fontList[font];
 	}
-
 }
