@@ -34,8 +34,9 @@ namespace game {
 	
 	class Food {
 	public:
-		Food(sf::RenderWindow *, sf::Vector2f loc);
+		Food(sf::RenderWindow *, sf::Vector2f& loc);
 		sf::RectangleShape getFood();
+		void setLocation(sf::Vector2f& loc);
 		void drawFood();
 		~Food() {
 			std::cout << "Food\n";
