@@ -21,9 +21,10 @@
    
 #include <random>
 #include <iostream>
+#include "sound.h"
 namespace game{
 
-
+	sound s;
 	// constructor
 	GameController::GameController(sf::RenderWindow * w) : snake(w)
 	{
@@ -33,6 +34,7 @@ namespace game{
    
 	void GameController::start()
 	{
+
 		loadResources();
 		// TODO 
 		gameLoop();
@@ -40,6 +42,8 @@ namespace game{
    
 	void GameController::gameLoop()
 	{
+		s.BGM();  // starts Background music 
+		s.menuMusic(false); // stops menu music 
 		bool loopInvarient = true;
 		sf::Vector2<int> direction(-1,0);
 		scale = 5;
@@ -73,11 +77,18 @@ namespace game{
 			snake.moveSnake(direction);
 			if (snake.died()) {
 				//game over
+				s.isDeath = true;
+				s.onCollisionSound();
 				loopInvarient = false;
+				s.BGM(); 
+				s.menuMusic(true);
 			}
 			if (snake.ateFood(food)) {
+				
 				score++;
 				delete food;
+				s.isFood = true;
+				s.onCollisionSound();
 				food = new Food(screen, snake.getNextFoodLocation());
 			}
 			screen->display();

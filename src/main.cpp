@@ -17,10 +17,69 @@
 *   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "UI/MainMenu.h"
- 
+#include "Game-core/sound.h"
+
 int main() {
+	sound so;
+	int cnt = 0;
 	sf::RenderWindow window( sf::VideoMode( 800, 800 ), "Snake", sf::Style::Close );
 	game::MainMenu menu;
+	game::StartGameAction s(&window);
 	menu.start(&window);
+	so.menuMusic(true);  // plays menu music
+	// This entire loop is just for the temporary fix for the create menu error
+	while (window.isOpen())
+	{
+		sf::Event event;
+
+		while (window.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::KeyReleased:
+				switch (event.key.code)
+				{
+				case sf::Keyboard::Up:
+					menu.MoveUp();
+					break;
+
+				case sf::Keyboard::Down:
+					menu.MoveDown();
+					break;
+
+				case sf::Keyboard::Return:
+					switch (menu.GetPressedItem())
+					{
+					case 0:
+						std::cout << "Play button has been pressed" << std::endl;
+						so.menuMusic(false);   // stops the menu music 
+						s.start();  // calls star from the mainMenu script
+						break;
+					case 1:
+						std::cout << "Option button has been pressed" << std::endl;
+						break;
+					case 2:
+						window.close();
+						break;
+					}
+
+					break;
+				}
+
+				break;
+			case sf::Event::Closed:
+				window.close();
+
+				break;
+
+			}
+		}
+		
+		window.clear();
+
+		menu.draw(window);
+
+		window.display();
+	}
 	return 0;
 }

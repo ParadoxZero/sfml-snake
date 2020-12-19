@@ -19,7 +19,7 @@
 
 #ifndef SS_USER_INTERFACE
 #define SS_USER_INTERFACE
-
+#include <iostream>
 
 /*--- Headers ---*/
 #include <SFML/Graphics.hpp>
@@ -88,6 +88,7 @@ namespace gmenu {
 			window = wnd;
 			//TODO
 			if (!MenuItemFont.loadFromFile("sansation.ttf"))
+			//	std::cout << "you fool" << std::endl;
 				exit(0);
 			MenuTitleFont.loadFromFile("sansation.ttf");
 		}

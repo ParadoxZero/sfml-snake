@@ -19,6 +19,8 @@
 
 #include "snake.h"
 #include "game.h"
+#include "sound.h"
+
 
 
 game::Snake::Snake(sf::RenderWindow *w)
