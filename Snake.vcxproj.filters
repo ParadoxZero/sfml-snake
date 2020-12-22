@@ -20,36 +20,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Game-core\snake.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game-core\game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game-core\food.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\UI\MainMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Game-core\snake.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game-core\game.h">
+    <ClInclude Include="src\Game-core\engine.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="src\Game-core\food.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game-core\engine.h">
+    <ClInclude Include="src\Game-core\game.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI\MainMenu.h" />
+    <ClInclude Include="src\Game-core\snake.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game-core\sound.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI\MainMenu.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -59,5 +47,33 @@
   <ItemGroup>
     <Text Include="Makefile" />
     <Text Include="license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="BGM.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="hit.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Game-core\food.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game-core\game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game-core\snake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI\MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game-core\sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

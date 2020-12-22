@@ -17,9 +17,9 @@
 *   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "UI/MainMenu.h"
- 
+
 int main() {
-	sf::RenderWindow window( sf::VideoMode( 800, 800 ), "Snake", sf::Style::Close );
+	sf::RenderWindow window(sf::VideoMode(800, 800), "Snake", sf::Style::Close);
 	game::MainMenu menu;
 	menu.start(&window);
 	return 0;
