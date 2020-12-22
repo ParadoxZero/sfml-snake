@@ -21,6 +21,8 @@
 #include "game.h"
 
 
+
+
 game::Snake::Snake(sf::RenderWindow *w)
 {
 	//Templ

@@ -30,6 +30,7 @@ namespace game {
 
 
 		void start(sf::RenderWindow *w);
+
 	private:
 		
 		gmenu::MenuItem menuItems[4];
@@ -41,6 +42,7 @@ namespace game {
 			"Options",
 			"Exit"
 		};
+
 	};
 
 	

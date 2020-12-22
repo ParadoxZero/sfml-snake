@@ -1,30 +1,33 @@
 #include "MainMenu.h"
+#include "SFML/Graphics.hpp"
+#include "Game-Core/game.h"
+#include "Game-core/sound.h"
+#include <iostream>
 
-#include "Game-core/game.h"
-
-
+SoundController s;
 
 void game::MainMenu::start( sf::RenderWindow * w ) {
-	gmenu::Menu menu( w );
-	action[0] = new StartGameAction( w );
-	action[3] = new ExitAction( w );
+	s.playMenuMusic();
+	gmenu::Menu menu(w);
+	action[0] = new StartGameAction(w);
+	action[3] = new ExitAction(w);
 	gmenu::MenuItem items[4];
-	for ( int i = 0; i < 4; ++i ) {
+	for (int i = 0; i < 4; ++i) {
 		items[i].title = MenuText[i];
 		items[i].action = action[0];
 	}
 	items[3].action = action[3];
-	menu.setMenuItems( items, 4 );
-	menu.setTitle( "Sfml-Snake" );
+	menu.setMenuItems(items, 4);
+	menu.setTitle("Sfml-Snake");
 	menu.createMenu();
 }
-
 
 game::StartGameAction::StartGameAction( sf::RenderWindow *w ) {
 	window = w;
 }
 
 bool game::StartGameAction::start() {
+	s.stopMenuMusic();
 	game::GameController gameController( window );
 	gameController.start();
 	return true;
