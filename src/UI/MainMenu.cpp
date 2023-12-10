@@ -1,73 +1,75 @@
 #include "MainMenu.h"
 
-#include "Game-core/game.h"
+#include "core/game.h"
 
+namespace game {
 
-
-void game::MainMenu::start( sf::RenderWindow * w ) {
-	gmenu::Menu menu( w );
-	action[0] = new StartGameAction( w );
-	action[3] = new ExitAction( w );
-	gmenu::MenuItem items[4];
-	for ( int i = 0; i < 4; ++i ) {
-		items[i].title = MenuText[i];
-		items[i].action = action[0];
-	}
-	items[3].action = action[3];
-	menu.setMenuItems( items, 4 );
-	menu.setTitle( "Sfml-Snake" );
-	menu.createMenu();
+MainMenu::MainMenu(sf::RenderWindow &w)
+    : _window(w), _main_menu_context(nullptr, menu_destroy_context) {
+  setup_menu_context();
 }
 
-
-game::StartGameAction::StartGameAction( sf::RenderWindow *w ) {
-	window = w;
+void MainMenu::start() {
+  _window.setFramerateLimit(60);
+	printf("Before event loop\n");
+  while (_window.isOpen()) {
+    if (_is_exit_requested) {
+      _window.close();
+      break;
+    }
+    sf::Event event;
+    while (_window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        _is_exit_requested = true;
+        break;
+      }
+      menu_handle_event(_current_menu, event);
+    }
+	_window.clear();
+	menu_render(_current_menu);
+	_window.display();
+  }
 }
 
-bool game::StartGameAction::start() {
-	game::GameController gameController( window );
-	gameController.start();
-	return true;
+void MainMenu::setup_menu_context() {
+  _font.loadFromFile("sansation.ttf");
+  game_menu::Style style{.ItemFont = &_font,
+                         .TitleFont = &_font,
+                         .TitleFontSize = 36,
+                         .ItemFontSize = 24,
+                         .MenuTitleScaleFactor = 1,
+                         .MenuItemScaleFactor = 1.5,
+                         .ColorScheme = {.TitleColor = 0xFFFFFF,
+                                         .ItemColor = 0xFFFFFF,
+                                         .SelectedColor = 0xFF22F1},
+                         .PaddingTitle =
+                             {
+                                 .top = 100,
+                                 .left = 0,
+                             },
+                         .PaddingItems =
+                             {
+                                 .top = 40,
+                             },
+                         .TitleAlign = game_menu::Align::Center,
+                         .ItemAlign = game_menu::Align::Center};
+
+  std::vector<game_menu::MenuItem> items{
+      {"New Game",
+       [&](sf::RenderTarget &target) {
+         game::GameController gameController(&_window);
+         gameController.start();
+       }},
+      {"Leaderboard", [](sf::RenderTarget &target) {}},
+      {"Settings", [](sf::RenderTarget &target) {}},
+      {"Exit",
+       [&](sf::RenderTarget &target) { this->_is_exit_requested = true; }}};
+
+  game_menu::MenuConfig config{
+      .title = "Snake", .items = items, .style = style};
+  _main_menu_context.reset(create_menu_context(_window, config));
+  _current_menu = _main_menu_context.get();
+  printf("menu created\n");
 }
 
-
-
-game::HighScoreAction::HighScoreAction( sf::RenderWindow *w ) {
-	window = w;
-}
-
-bool game::HighScoreAction::start() {
-	return false;
-}
-
-game::OptionsAction::OptionsAction( sf::RenderWindow *w ) {
-	window = w;
-}
-
-bool game::OptionsAction::start() {
-	return false;
-}
-
-game::ExitAction::ExitAction( sf::RenderWindow *w ) {
-	window = w;
-}
-
-bool game::ExitAction::start() {
-	if ( getConfirmation() )
-		return false; // means exit
-	return true;
-}
-
-bool game::ExitAction::getConfirmation() {
-	bool confirm = false;
-	gmenu::MenuItem items[2]; //Creating a list of Menu Items for the Dialog
-	items[0].title = "Yes";
-	items[0].action = new ConfirmationMenuAction( &confirm );
-	items[1].title = "No";
-	items[1].action = new DeclineMenuAction( &confirm );
-	gmenu::Menu dialog( window, "Are you sure?", items, 2 ); //Creating the confirmation dialog
-	dialog.createMenu();
-	return confirm;
-}
-
-
+} // namespace game
