@@ -20,89 +20,25 @@
 #ifndef SS_UI_MAIN_MENU_H_
 #define SS_UI_MAIN_MENU_H_
 
-#include <GameMenu/GameMenu.h>
 #include <SFML/Graphics.hpp>
+#include <game_menu/game_menu.h>
+#include <memory>
 
 namespace game {
 
 	class MainMenu {
 	public:
-
-
-		void start(sf::RenderWindow *w);
+		MainMenu(sf::RenderWindow &w);
+		void start();
 	private:
-		
-		gmenu::MenuItem menuItems[4];
-		gmenu::Action *action[4];
+		void setup_menu_context();
 
-		char MenuText[4][15] = {
-			"Start",
-			"High Score",
-			"Options",
-			"Exit"
-		};
+		sf::RenderWindow &_window;
+		sf::Font _font;
+		game_menu::MENU * _current_menu;
+		std::unique_ptr< game_menu::MENU, std::function<void( game_menu::MENU* )>> _main_menu_context;
+		bool _is_exit_requested = false;
 	};
-
-	
-	class StartGameAction : public gmenu::Action {
-	public:
-		StartGameAction( sf::RenderWindow * );
-		bool start();
-	private:
-		sf::RenderWindow *window;
-	};
-	class HighScoreAction : public gmenu::Action {
-	public:
-		HighScoreAction( sf::RenderWindow * );
-		bool start();
-	private:
-		sf::RenderWindow *window;
-	};
-	class OptionsAction : public gmenu::Action {
-	public:
-		OptionsAction( sf::RenderWindow * );
-		bool start();
-	private:
-		sf::RenderWindow *window;
-	};
-	
-	
-	
-	class ExitAction : public gmenu::Action {
-	public:
-		ExitAction( sf::RenderWindow * );
-		bool start();
-	private:
-		bool getConfirmation();
-
-		sf::RenderWindow *window;
-
-		class ConfirmationMenuAction : public gmenu::Action {
-			bool *confirm;
-		public:
-			ConfirmationMenuAction( bool *val ) {
-				confirm = val;
-			}
-			bool start() {
-				*confirm = true;
-				return false;
-			}
-		};
-		/* bool start() returns false in both case so that the dialog
-		will be closed after the action is selected */
-		class DeclineMenuAction : public gmenu::Action {
-			bool *confirm;
-		public:
-			DeclineMenuAction( bool *val ) {
-				confirm = val;
-			}
-			bool start() {
-				*confirm = false;
-				return false;
-			}
-		};
-	};
-	
 }
 
 #endif // !SS_UI_MAIN_MENU_H_
