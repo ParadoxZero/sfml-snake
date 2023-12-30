@@ -33,15 +33,16 @@ void MainMenu::start() {
 
 void MainMenu::setup_menu_context() {
   _font.loadFromFile("sansation.ttf");
-  game_menu::Style style{.ItemFont = &_font,
+  game_menu::Style style{
                          .TitleFont = &_font,
+                         .ItemFont = &_font,
                          .TitleFontSize = 36,
                          .ItemFontSize = 24,
                          .MenuTitleScaleFactor = 1,
                          .MenuItemScaleFactor = 1.5,
-                         .ColorScheme = {.TitleColor = 0xFFFFFF,
-                                         .ItemColor = 0xFFFFFF,
-                                         .SelectedColor = 0xFF22F1},
+                         .colorScheme = {.titleColor = 0xFFFFFF,
+                                         .itemColor = 0xFFFFFF,
+                                         .selectedColor = 0xFF22F1},
                          .PaddingTitle =
                              {
                                  .top = 100,

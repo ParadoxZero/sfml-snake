@@ -10,8 +10,8 @@ set(VERSION_PATCH 0)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wno-error=unused-command-line-argument")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-error=unused-command-line-argument")
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wno-error=unused-command-line-argument")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-error=unused-command-line-argument")
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -22,7 +22,7 @@ FetchContent_MakeAvailable(SFML)
 
 FetchContent_Declare(gamemenu
     GIT_REPOSITORY https://github.com/ParadoxZero/GameMenu-cpp.git
-    GIT_TAG 15d8385f4d2db3b03b2a73800d8a54c542c84b22
+    GIT_TAG 88a755e00f2da8a2d600479085a4bc92b8d5d30f
     GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(gamemenu)
 
