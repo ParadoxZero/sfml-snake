@@ -10,9 +10,6 @@ set(VERSION_PATCH 0)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wno-error=unused-command-line-argument")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-error=unused-command-line-argument")
-
 include(FetchContent)
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -39,7 +36,12 @@ set(SOURCE_FILES
 "src/core/game.cpp"
 )
 
-add_executable(snake ${SOURCE_FILES})
+if(WIN32)
+    add_executable(snake WIN32 ${SOURCE_FILES})
+else()
+    add_executable(snake ${SOURCE_FILES})
+endif()
+
 target_link_libraries(snake PRIVATE sfml-graphics gamemenu)
 target_compile_features(snake PRIVATE cxx_std_17)
 target_include_directories(snake PRIVATE src)

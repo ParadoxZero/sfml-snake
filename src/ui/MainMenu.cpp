@@ -1,3 +1,22 @@
+/*
+ *	Copyright (C) 2016 Sidhin S Thomas
+ *
+ *	This file is part of sfml-snake.
+ *
+ *    sfml-snake is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   sfml-snake is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with sfml-snake.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "MainMenu.h"
 
 #include "core/game.h"
@@ -11,7 +30,6 @@ MainMenu::MainMenu(sf::RenderWindow &w)
 
 void MainMenu::start() {
   _window.setFramerateLimit(60);
-	printf("Before event loop\n");
   while (_window.isOpen()) {
     if (_is_exit_requested) {
       _window.close();
@@ -25,16 +43,15 @@ void MainMenu::start() {
       }
       menu_handle_event(_current_menu, event);
     }
-	_window.clear();
-	menu_render(_current_menu);
-	_window.display();
+    _window.clear();
+    menu_render(_current_menu);
+    _window.display();
   }
 }
 
 void MainMenu::setup_menu_context() {
   _font.loadFromFile("sansation.ttf");
-  game_menu::Style style{
-                         .TitleFont = &_font,
+  game_menu::Style style{.TitleFont = &_font,
                          .ItemFont = &_font,
                          .TitleFontSize = 36,
                          .ItemFontSize = 24,
@@ -70,7 +87,6 @@ void MainMenu::setup_menu_context() {
       .title = "Snake", .items = items, .style = style};
   _main_menu_context.reset(create_menu_context(_window, config));
   _current_menu = _main_menu_context.get();
-  printf("menu created\n");
 }
 
 } // namespace game
