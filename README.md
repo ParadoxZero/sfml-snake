@@ -1,5 +1,5 @@
 # SFML-snake 
-![Language (C++)](https://img.shields.io/badge/powered_by-C++-brightgreen.svg?style=flat-square)  [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)  [![Build Status](https://travis-ci.org/ParadoxZero/sfml-snake.svg?branch=master)](https://travis-ci.org/ParadoxZero/sfml-snake)  [![Gitter chat](https://badges.gitter.im/sfml-snake/gitter.png)](https://gitter.im/sfml-snake)
+![Language (C++)](https://img.shields.io/badge/powered_by-C++-brightgreen.svg?style=flat-square)  [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0) 
 
 
 A classic snake game made in C++ using sfml library.
@@ -13,8 +13,7 @@ If you are a **beginer**, try to
 
 ## Screenshots
 ![Screenshot](Screenshots/2016-12-19.png?raw=true "Sample Main Menu")
-![Screenshot](Screenshots/2016-12-17.png?raw=true "Sample Main Menu")
-![Screenshot](Screenshots/2016-12-17%20(1).png?raw=true "Sample Main Menu")
+![Screenshot](Screenshots/2016-12-17.png?raw=true "Sample gameplay")
 
 ## Requirements
 
@@ -24,12 +23,21 @@ If you are a **beginer**, try to
   
 ## Building
 
+The CMAKE is set up to automatically download the dependencies and link against it. It will be done when configuring cmake.
+
+```
+git clone https://github.com/ParadoxZero/sfml-snake.git
+cd sfml-snake
+make build
+```
+
+### Manual build steps using cmake
+
 - `git clone https://github.com/ParadoxZero/sfml-snake.git`
 - Create a directory for cmake , e.g. - `mkdir build`
 - `cd build`
 - `cmake .. -G Ninja` or `cmake ..` (to use the default build system)
 - `ninja snake` or `make snake` (depending on your selected build system)
-
  
 ## Contribution
  
