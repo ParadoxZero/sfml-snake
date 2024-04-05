@@ -1,7 +1,8 @@
+include(FetchContent)
+
 cmake_minimum_required(VERSION 3.16)
 project(sfml-snake LANGUAGES CXX)
 
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 set(VERSION_MAJOR 1)
@@ -10,7 +11,12 @@ set(VERSION_PATCH 0)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include(FetchContent)
+# Due to bug in sfml's build system. It doesn't affect anything much so leaving it off
+set(FLAGS "-Wno-unused-command-line-argument") 
+
+set(CMAKE_C_FLAGS ${FLAGS})
+set(CMAKE_CXX_FLAGS ${FLAGS})
+
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
     GIT_TAG 11b73743c42cf7ecd7c596ba83fdbf1150ffa96c
