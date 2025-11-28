@@ -25,10 +25,15 @@ FetchContent_MakeAvailable(SFML)
 
 FetchContent_Declare(gamemenu
     GIT_REPOSITORY https://github.com/ParadoxZero/GameMenu-cpp.git
-    GIT_TAG 88a755e00f2da8a2d600479085a4bc92b8d5d30f
+    GIT_TAG master
     GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(gamemenu)
 
+FetchContent_Declare(rltools
+        GIT_REPOSITORY https://github.com/rl-tools/rl-tools.git
+        GIT_TAG v2.2.0
+        GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(rltools)
 set(SOURCE_FILES 
 "src/main.cpp"
 "src/ui/MainMenu.cpp"
