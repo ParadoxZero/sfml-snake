@@ -55,7 +55,7 @@ public:
   bool died();
   bool ateFood(Food *fd);
   void moveSnake(sf::Vector2<int> direction);
-
+  void snake_reset();
   sf::Vector2f getNextFoodLocation();
 
 private:

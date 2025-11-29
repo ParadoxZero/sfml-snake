@@ -19,11 +19,12 @@
 
 #include "snake.h"
 #include "game.h"
+//#include "../../../../../../Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk/System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSGraphics.h"
 
 game::Snake::Snake(sf::RenderWindow *w) {
   // Templ
-  colorBody = sf::Color::Green;
-  colorHead = sf::Color::Yellow;
+  colorBody = sf::Color::White;
+  colorHead = sf::Color::Blue;
   movementScale = 5;
   screen = w;
 
@@ -40,21 +41,32 @@ game::Snake::Snake(sf::RenderWindow *w) {
 }
 
 void game::Snake::drawSnake() {
-  for (int i = 1; i < snake_length; ++i) {
+  for (int i = 0; i < snake_length; ++i) {
     screen->draw(body[i]);
   }
   screen->draw(body[0]);
 }
 
 bool game::Snake::died() {
+  int rv;
+
+  colorBody = sf::Color::Red ;
+  colorHead = sf::Color::Green;
   for (int i = BOX_SIZE / (movementScale / 10); i < snake_length; ++i) {
     if (checkCollision(body[0], body[i]))
       return true;
   }
-  // hitting walls check
-  int x = body[0].getGlobalBounds().left, y = body[0].getGlobalBounds().top;
-  int mx = screen->getSize().x, my = screen->getSize().y;
-  return (x > mx || x < 0) || (y > my || y < 0);
+  // hitting walls chec
+  if (body.size() == 0) {
+    rv = false;
+  }
+  else {
+    int x = body[0].getGlobalBounds().left, y = body[0].getGlobalBounds().top;
+    int mx = screen->getSize().x, my = screen->getSize().y;
+    rv = (x > mx || x < 0) || (y > my || y < 0);
+
+  }
+   return rv;
 }
 
 bool game::Snake::ateFood(Food *fd) {
@@ -104,4 +116,16 @@ sf::Vector2f game::Snake::getNextFoodLocation() {
       return food_loc;
   } // while(okay)
   return food_loc;
+}
+
+//snake len init
+void game::Snake::snake_reset() {
+  snake_length = 1;
+  body.resize(1);
+  int x =
+      rand.getRandomInt(screen->getSize().x / 4, screen->getSize().x * 3 / 4);
+  int y =
+      rand.getRandomInt(screen->getSize().y / 4, screen->getSize().y * 3 / 4);
+    body[0].setPosition(x,y);
+    snake_direction_list.push_front(sf::Vector2<int>(-1, 0));
 }

@@ -63,6 +63,7 @@ public:
 
   /* Public methods */
   void start();
+  void reset();
   /* methods to access the resources */
   sf::Font *getFont(Fonts font); // no definition yet
 

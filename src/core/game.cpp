@@ -31,7 +31,7 @@ GameController::GameController(sf::RenderWindow *w) : snake(w) {
 }
   // snake location
   sf::Vector2<int> direction(-1, 0);
-
+  std::unique_ptr<Food> food;
 
   // game loop
 void GameController::start() {
@@ -39,7 +39,15 @@ void GameController::start() {
   // TODO
   gameLoop();
 }
-
+ void GameController::reset() {
+  //food location init
+  std::unique_ptr<Food> food =
+    std::make_unique<Food>(screen, snake.getNextFoodLocation());
+  direction.x = -1;
+  direction.y = 0;
+  score = 0;
+  snake.snake_reset();
+}
 
   //key board control
 void GameController::gamekeyboard_control() {
@@ -70,7 +78,7 @@ void GameController::gamekeyboard_control() {
 void GameController::gameLoop() {
   bool loopInvarient = true;
 
-  //food location
+  //food location get
   std::unique_ptr<Food> food =
     std::make_unique<Food>(screen, snake.getNextFoodLocation());
 // gameplay
@@ -84,8 +92,10 @@ void GameController::gameLoop() {
     snake.moveSnake(direction);
     // game over
     if (snake.died()) {
-    //  loopInvarient = false;
+      //loopInvarient = false;
+        reset();
     }
+
     // get socre
     if (snake.ateFood(food.get())) {
       score++;
