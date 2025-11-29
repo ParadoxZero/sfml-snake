@@ -69,6 +69,7 @@ public:
 private:
   void gameLoop();
   void setupScene();
+  void gamekeyboard_control();
   void gameOver();      // no definition yet
   void loadResources(); // no definition yet
 

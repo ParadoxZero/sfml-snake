@@ -85,14 +85,15 @@ void game::Snake::moveSnake(sf::Vector2<int> direction) {
   }
 }
 
+//food generate
 sf::Vector2f game::Snake::getNextFoodLocation() {
   bool okay = true;
+  int x = rand.getRandomInt(0, screen->getSize().x - 4 * BOX_SIZE);
+  int y = rand.getRandomInt(0, screen->getSize().y - 4 * BOX_SIZE);
+  sf::Vector2f food_loc(x, y);
   while (okay) {
     /* This loop exists to make sure the new food does not spawn inside the
      * snake */
-    int x = rand.getRandomInt(0, screen->getSize().x - 4 * BOX_SIZE);
-    int y = rand.getRandomInt(0, screen->getSize().y - 4 * BOX_SIZE);
-    sf::Vector2f food_loc(x, y);
     okay = true;
     for (int i = 0; i < snake_length; ++i) {
       if (body[i].getGlobalBounds().contains(food_loc)) {
@@ -102,4 +103,5 @@ sf::Vector2f game::Snake::getNextFoodLocation() {
     if (okay)
       return food_loc;
   } // while(okay)
+  return food_loc;
 }
