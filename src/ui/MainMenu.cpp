@@ -76,7 +76,7 @@ void MainMenu::setup_menu_context() {
   std::vector<game_menu::MenuItem> items{
       {"New Game",
        [&](sf::RenderTarget &target) {
-         game::GameController gameController(&_window);
+         GameController gameController(&_window);
          gameController.start();
        }},
     {"AI Training", [](sf::RenderTarget &target) {

@@ -45,6 +45,8 @@ set(SOURCE_FILES
 "src/core/snake.cpp"
 "src/core/game.h"
 "src/core/game.cpp"
+        src/ui/TipWindow.cpp
+        src/ui/TipWindow.h
 )
 
 if(WIN32)

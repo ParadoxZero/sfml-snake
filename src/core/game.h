@@ -22,7 +22,7 @@
 
 #include "food.h"
 #include "snake.h"
-
+#include "ui/TipWindow.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <random>
@@ -66,14 +66,14 @@ public:
   void reset();
   /* methods to access the resources */
   sf::Font *getFont(Fonts font); // no definition yet
-
+  bool loopInvarient;
 private:
   void gameLoop();
   void setupScene();
   void gamekeyboard_control();
   void gameOver();      // no definition yet
   void loadResources(); // no definition yet
-
+  TipWindow::win_val tipwindow_generate();
   Snake snake;
   sf::RenderWindow *screen;
   float scale;

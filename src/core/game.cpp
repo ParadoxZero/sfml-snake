@@ -49,6 +49,21 @@ void GameController::start() {
   snake.snake_reset();
 }
 
+  TipWindow::win_val GameController::tipwindow_generate() {
+
+  TipWindow::win_val rv;
+  sf::RenderWindow window(sf::VideoMode(300, 300), "Snake", sf::Style::Close);
+  game::TipWindow tip_window(window);
+
+  tip_window.start();
+  if (tip_window.win_return == game::TipWindow::Exit) {
+    rv = TipWindow::Exit;
+  }
+  else {
+    rv = TipWindow::Continue;
+  }
+  return rv;
+}
   //key board control
 void GameController::gamekeyboard_control() {
   sf::Event event;
@@ -93,7 +108,14 @@ void GameController::gameLoop() {
     // game over
     if (snake.died()) {
       //loopInvarient = false;
-        reset();
+      TipWindow::win_val win_rv = this->tipwindow_generate();
+      if (win_rv == TipWindow::Exit) {
+        loopInvarient = false;
+      }
+      else {
+        this->reset();
+      }
+     // this->reset();
     }
 
     // get socre
