@@ -25,7 +25,7 @@ FetchContent_MakeAvailable(SFML)
 
 FetchContent_Declare(gamemenu
     GIT_REPOSITORY https://github.com/ParadoxZero/GameMenu-cpp.git
-    GIT_TAG 88a755e00f2da8a2d600479085a4bc92b8d5d30f
+    GIT_TAG 3833bbbb207483f5e16ef3417b392e2307636296 
     GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(gamemenu)
 
