@@ -38,6 +38,20 @@ make build
 - `cd build`
 - `cmake .. -G Ninja` or `cmake ..` (to use the default build system)
 - `ninja snake` or `make snake` (depending on your selected build system)
+
+### Ubuntu dependencies
+Non exhaustive list - 
+```
+sudo apt update
+sudo apt install -y \
+  libx11-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev \
+  libxrender-dev libxfixes-dev \
+  libgl1-mesa-dev libglu1-mesa-dev libglx-mesa-dev \
+  libudev-dev \
+  libopenal-dev \
+  libvorbis-dev libogg-dev libflac-dev \
+  libfreetype6-dev
+```
  
 ## Contribution
  
