@@ -4,10 +4,6 @@
 
 #include "game_ai_action.h"
 
-#include <objc/objc.h>
-
-#include "array"
-
 namespace game_ai {
     Game_Ai::Game_Ai(game::GameController game_ctrl) {
 
