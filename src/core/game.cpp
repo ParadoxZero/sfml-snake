@@ -214,6 +214,28 @@ sf::Font *GameController::getFont(Fonts font) { return &fontList[font]; }
   bool done = game_over;
   return { AI_GetState(), reward, done };
 }
+  // Headless step: moves the snake, checks collisions/food, returns (state, reward, done).
+  // Does not render anything — safe to call in a tight training loop.
+  std::tuple<State, float, bool> GameController::AI_HeadlessStep(int action) {
+    AI_Move_Action(action);
+    snake.moveSnake(direction);
+
+    game_over = snake.died();
+    food_ate  = false;
+
+    if (!game_over && snake.ateFood(food.get())) {
+      score++;
+      food_ate = true;
+      food.reset(new Food(screen, snake.getNextFoodLocation()));
+    }
+
+    float reward = game_over ? -10.0f : (food_ate ? 10.0f : -0.01f);
+    bool  done   = game_over;
+    State next   = done ? State{} : AI_GetState();
+
+    return { next, reward, done };
+  }
+
 } // namespace game
 
 

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push:*)",
+      "Bash(git remote:*)",
+      "Bash(mkdir -p ~/.ssh)",
+      "Bash(ssh-keyscan github.com)",
+      "Bash(~/.ssh/known_hosts)",
+      "Bash(ssh -T git@github.com)",
+      "Bash(cmake -S . -B build -DCMAKE_BUILD_TYPE=Release)"
+    ]
+  }
+}

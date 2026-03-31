@@ -71,6 +71,8 @@ public:
   void start();
   void reset();
   std::tuple<State, float, bool> Ai_Action_Step(int action);
+  // Headless step for AI training: advances game state without rendering
+  std::tuple<State, float, bool> AI_HeadlessStep(int action);
   /* methods to access the resources */
   sf::Font *getFont(Fonts font); // no definition yet
   bool loopInvarient;
