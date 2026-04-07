@@ -62,14 +62,14 @@ inline void run_training(sf::RenderWindow& window) {
     game::GameController env(&window);
     dqn::DQNAgent agent(8, game::ACTION_COUNT);
 
-    constexpr int MAX_EPISODES = 5000;
-    constexpr int MAX_STEPS    = 1000;
-    constexpr int PRINT_EVERY  = 50;
+    constexpr int MAX_EPISODES   = 5000;
+    constexpr int MAX_STEPS      = 1000;
+    constexpr int AVG_WINDOW     = 50;   // rolling average window
+    constexpr int LOG_EVERY      = 50;   // console log frequency
 
     std::vector<int> scores;
     float avg_score = 0.0f;
 
-    // Draw initial screen before training starts
     draw_ui(window, font, 0, MAX_EPISODES, 0.0f, agent.epsilon);
 
     for (int ep = 0; ep < MAX_EPISODES; ep++) {
@@ -98,18 +98,20 @@ inline void run_training(sf::RenderWindow& window) {
 
         scores.push_back(food_count);
 
-        if ((ep + 1) % PRINT_EVERY == 0) {
-            int n = std::min(PRINT_EVERY, (int)scores.size());
-            avg_score = 0.0f;
-            for (int i = (int)scores.size() - n; i < (int)scores.size(); i++)
-                avg_score += scores[i];
-            avg_score /= n;
+        // Recompute rolling average
+        int n = std::min(AVG_WINDOW, (int)scores.size());
+        avg_score = 0.0f;
+        for (int i = (int)scores.size() - n; i < (int)scores.size(); i++)
+            avg_score += scores[i];
+        avg_score /= n;
 
+        // Update UI every episode so progress bar always moves
+        draw_ui(window, font, ep + 1, MAX_EPISODES, avg_score, agent.epsilon);
+
+        if ((ep + 1) % LOG_EVERY == 0) {
             std::cout << "Episode " << std::setw(5) << ep + 1
                       << "  |  Avg score: " << std::fixed << std::setprecision(2) << avg_score
                       << "  |  epsilon: "   << std::setprecision(3) << agent.epsilon << "\n";
-
-            draw_ui(window, font, ep + 1, MAX_EPISODES, avg_score, agent.epsilon);
         }
     }
 
