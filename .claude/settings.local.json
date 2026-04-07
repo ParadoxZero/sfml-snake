@@ -7,7 +7,9 @@
       "Bash(ssh-keyscan github.com)",
       "Bash(~/.ssh/known_hosts)",
       "Bash(ssh -T git@github.com)",
-      "Bash(cmake -S . -B build -DCMAKE_BUILD_TYPE=Release)"
+      "Bash(cmake -S . -B build -DCMAKE_BUILD_TYPE=Release)",
+      "Bash(git commit:*)",
+      "Bash(git add:*)"
     ]
   }
 }

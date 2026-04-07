@@ -20,6 +20,7 @@
 #include "MainMenu.h"
 
 #include "core/game.h"
+#include "ai/trainer.h"
 
 namespace game {
 
@@ -79,8 +80,8 @@ void MainMenu::setup_menu_context() {
          GameController gameController(&_window);
          gameController.start();
        }},
-    {"AI Training", [](sf::RenderTarget &target) {
-
+    {"AI Training", [&](sf::RenderTarget &target) {
+        ai_trainer::run_training(_window);
     }},
     {"AI Play", [](sf::RenderTarget &target) {}},
       {"Leaderboard", [](sf::RenderTarget &target) {}},
