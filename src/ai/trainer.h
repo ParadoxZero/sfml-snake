@@ -115,7 +115,42 @@ inline void run_training(sf::RenderWindow& window) {
         }
     }
 
-    std::cout << "Training done.\n";
+    agent.save("snake_model.bin");
+    std::cout << "Training done. Model saved to snake_model.bin\n";
+}
+
+// ─── AI Play ──────────────────────────────────────────────────────────────────
+
+inline void draw_not_trained(sf::RenderWindow& window, sf::Font& font) {
+    window.clear(sf::Color(20, 20, 30));
+    sf::Text msg("Model not trained yet.\nPlease run AI Training first.\n\nPress any key to return.", font, 28);
+    msg.setFillColor(sf::Color(220, 80, 80));
+    msg.setPosition(80, 300);
+    window.draw(msg);
+    window.display();
+}
+
+inline void run_ai_play(sf::RenderWindow& window) {
+    sf::Font font;
+    font.loadFromFile("sansation.ttf");
+
+    dqn::DQNAgent agent(8, game::ACTION_COUNT);
+    if (!agent.load("snake_model.bin")) {
+        draw_not_trained(window, font);
+        sf::Event event;
+        while (window.waitEvent(event)) {
+            if (event.type == sf::Event::Closed ||
+                event.type == sf::Event::KeyPressed) break;
+        }
+        return;
+    }
+
+    game::GameController env(&window);
+    env.AI_GameLoop([&](game::State s) {
+        auto state = dqn::normalize_state(s);
+        auto q     = agent.policy_net.predict(state);
+        return (int)(std::max_element(q.begin(), q.end()) - q.begin());
+    });
 }
 
 } // namespace ai_trainer

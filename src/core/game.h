@@ -24,6 +24,7 @@
 #include "snake.h"
 #include "ui/TipWindow.h"
 #include <SFML/Graphics.hpp>
+#include <functional>
 #include <list>
 #include <random>
 
@@ -73,6 +74,8 @@ public:
   std::tuple<State, float, bool> Ai_Action_Step(int action);
   // Headless step for AI training: advances game state without rendering
   std::tuple<State, float, bool> AI_HeadlessStep(int action);
+  // Rendered game loop driven by an AI policy (for watching the trained agent)
+  void AI_GameLoop(std::function<int(State)> policy);
   /* methods to access the resources */
   sf::Font *getFont(Fonts font); // no definition yet
   bool loopInvarient;

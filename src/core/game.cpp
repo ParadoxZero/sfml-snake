@@ -214,6 +214,43 @@ sf::Font *GameController::getFont(Fonts font) { return &fontList[font]; }
   bool done = game_over;
   return { AI_GetState(), reward, done };
 }
+  // Rendered game loop driven by an AI policy — call this to watch the trained agent play.
+  void GameController::AI_GameLoop(std::function<int(State)> policy) {
+    reset();
+    screen->setFramerateLimit(10); // slow enough to watch
+
+    while (true) {
+      // Poll events
+      sf::Event event;
+      while (screen->pollEvent(event))
+        if (event.type == sf::Event::Closed) return;
+
+      // Render
+      setupScene();
+      food->drawFood();
+      screen->display();
+
+      // AI decides action
+      int action = policy(AI_GetState());
+      AI_Move_Action(action);
+      snake.moveSnake(direction);
+
+      game_over = snake.died();
+      food_ate  = false;
+      if (!game_over && snake.ateFood(food.get())) {
+        score++;
+        food_ate = true;
+        food.reset(new Food(screen, snake.getNextFoodLocation()));
+      }
+
+      if (game_over) {
+        // Brief pause then restart
+        sf::sleep(sf::seconds(0.8f));
+        reset();
+      }
+    }
+  }
+
   // Headless step: moves the snake, checks collisions/food, returns (state, reward, done).
   // Does not render anything — safe to call in a tight training loop.
   std::tuple<State, float, bool> GameController::AI_HeadlessStep(int action) {

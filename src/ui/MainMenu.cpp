@@ -83,7 +83,9 @@ void MainMenu::setup_menu_context() {
     {"AI Training", [&](sf::RenderTarget &target) {
         ai_trainer::run_training(_window);
     }},
-    {"AI Play", [](sf::RenderTarget &target) {}},
+    {"AI Play", [&](sf::RenderTarget &target) {
+        ai_trainer::run_ai_play(_window);
+    }},
       {"Leaderboard", [](sf::RenderTarget &target) {}},
       {"Settings", [](sf::RenderTarget &target) {}},
       {"Exit",

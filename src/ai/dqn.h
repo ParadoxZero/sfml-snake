@@ -7,6 +7,8 @@
 #include <cassert>
 #include <deque>
 #include <array>
+#include <fstream>
+#include <string>
 
 // Self-contained DQN implementation. No game dependencies.
 namespace dqn {
@@ -182,6 +184,34 @@ struct NeuralNetwork {
         b1=src.b1; b2=src.b2; b3=src.b3;
     }
 
+    void save(const std::string& path) const {
+        std::ofstream f(path, std::ios::binary);
+        auto wm = [&](const Matrix& m) {
+            f.write(reinterpret_cast<const char*>(m.data.data()),
+                    (std::streamsize)(m.data.size() * sizeof(float)));
+        };
+        auto wv = [&](const std::vector<float>& v) {
+            f.write(reinterpret_cast<const char*>(v.data()),
+                    (std::streamsize)(v.size() * sizeof(float)));
+        };
+        wm(W1); wv(b1); wm(W2); wv(b2); wm(W3); wv(b3);
+    }
+
+    bool load(const std::string& path) {
+        std::ifstream f(path, std::ios::binary);
+        if (!f) return false;
+        auto rm = [&](Matrix& m) {
+            f.read(reinterpret_cast<char*>(m.data.data()),
+                   (std::streamsize)(m.data.size() * sizeof(float)));
+        };
+        auto rv = [&](std::vector<float>& v) {
+            f.read(reinterpret_cast<char*>(v.data()),
+                   (std::streamsize)(v.size() * sizeof(float)));
+        };
+        rm(W1); rv(b1); rm(W2); rv(b2); rm(W3); rv(b3);
+        return f.good();
+    }
+
 private:
     void adam(Matrix& W, Matrix& m, Matrix& v, const Matrix& g, float bc1, float bc2) {
         for (int i = 0; i < (int)W.data.size(); i++) {
@@ -271,6 +301,9 @@ public:
     void store(std::vector<float> s, int a, float r, std::vector<float> s2, bool done) {
         buffer.push({std::move(s), std::move(s2), a, r, done});
     }
+
+    void save(const std::string& path) const { policy_net.save(path); }
+    bool load(const std::string& path)       { return policy_net.load(path); }
 
     void train_step() {
         if (buffer.size() < batch_size) return;
