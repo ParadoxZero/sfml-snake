@@ -184,6 +184,7 @@ struct NeuralNetwork {
         b1=src.b1; b2=src.b2; b3=src.b3;
     }
 
+    // Save weights only (for inference)
     void save(const std::string& path) const {
         std::ofstream f(path, std::ios::binary);
         auto wm = [&](const Matrix& m) {
@@ -210,6 +211,38 @@ struct NeuralNetwork {
         };
         rm(W1); rv(b1); rm(W2); rv(b2); rm(W3); rv(b3);
         return f.good();
+    }
+
+    // Save/load weights + Adam state (for resuming training)
+    void write_full(std::ofstream& f) const {
+        auto wm = [&](const Matrix& m) {
+            f.write(reinterpret_cast<const char*>(m.data.data()),
+                    (std::streamsize)(m.data.size() * sizeof(float)));
+        };
+        auto wv = [&](const std::vector<float>& v) {
+            f.write(reinterpret_cast<const char*>(v.data()),
+                    (std::streamsize)(v.size() * sizeof(float)));
+        };
+        wm(W1); wv(b1); wm(W2); wv(b2); wm(W3); wv(b3);
+        // Adam state
+        wm(mW1); wm(vW1); wm(mW2); wm(vW2); wm(mW3); wm(vW3);
+        wv(mb1); wv(vb1); wv(mb2); wv(vb2); wv(mb3); wv(vb3);
+        f.write(reinterpret_cast<const char*>(&t), sizeof(t));
+    }
+
+    void read_full(std::ifstream& f) {
+        auto rm = [&](Matrix& m) {
+            f.read(reinterpret_cast<char*>(m.data.data()),
+                   (std::streamsize)(m.data.size() * sizeof(float)));
+        };
+        auto rv = [&](std::vector<float>& v) {
+            f.read(reinterpret_cast<char*>(v.data()),
+                   (std::streamsize)(v.size() * sizeof(float)));
+        };
+        rm(W1); rv(b1); rm(W2); rv(b2); rm(W3); rv(b3);
+        rm(mW1); rm(vW1); rm(mW2); rm(vW2); rm(mW3); rm(vW3);
+        rv(mb1); rv(vb1); rv(mb2); rv(vb2); rv(mb3); rv(vb3);
+        f.read(reinterpret_cast<char*>(&t), sizeof(t));
     }
 
 private:
@@ -260,6 +293,42 @@ public:
 
     int size() const { return (int)buf.size(); }
 
+    void write(std::ofstream& f, int state_size) const {
+        int32_t n = (int32_t)buf.size();
+        f.write(reinterpret_cast<const char*>(&n), sizeof(n));
+        for (const auto& e : buf) {
+            f.write(reinterpret_cast<const char*>(e.state.data()),
+                    state_size * sizeof(float));
+            f.write(reinterpret_cast<const char*>(e.next_state.data()),
+                    state_size * sizeof(float));
+            int32_t a = e.action;
+            int8_t  d = e.done ? 1 : 0;
+            f.write(reinterpret_cast<const char*>(&a),       sizeof(a));
+            f.write(reinterpret_cast<const char*>(&e.reward), sizeof(float));
+            f.write(reinterpret_cast<const char*>(&d),       sizeof(d));
+        }
+    }
+
+    void read(std::ifstream& f, int state_size) {
+        buf.clear();
+        int32_t n = 0;
+        f.read(reinterpret_cast<char*>(&n), sizeof(n));
+        for (int32_t i = 0; i < n; i++) {
+            Experience e;
+            e.state.resize(state_size);
+            e.next_state.resize(state_size);
+            f.read(reinterpret_cast<char*>(e.state.data()),      state_size * sizeof(float));
+            f.read(reinterpret_cast<char*>(e.next_state.data()), state_size * sizeof(float));
+            int32_t a = 0; int8_t d = 0;
+            f.read(reinterpret_cast<char*>(&a),       sizeof(a));
+            f.read(reinterpret_cast<char*>(&e.reward), sizeof(float));
+            f.read(reinterpret_cast<char*>(&d),       sizeof(d));
+            e.action = a;
+            e.done   = (d != 0);
+            buf.push_back(std::move(e));
+        }
+    }
+
 private:
     int capacity;
     std::deque<Experience> buf;
@@ -302,8 +371,39 @@ public:
         buffer.push({std::move(s), std::move(s2), a, r, done});
     }
 
+    // Weights only — for AI Play
     void save(const std::string& path) const { policy_net.save(path); }
     bool load(const std::string& path)       { return policy_net.load(path); }
+
+    // Full checkpoint — for resuming training
+    static constexpr uint32_t MAGIC = 0xDEAD1234;
+
+    void save_checkpoint(const std::string& path, int episode) const {
+        std::ofstream f(path, std::ios::binary);
+        uint32_t magic = MAGIC;
+        f.write(reinterpret_cast<const char*>(&magic),   sizeof(magic));
+        f.write(reinterpret_cast<const char*>(&episode), sizeof(episode));
+        f.write(reinterpret_cast<const char*>(&steps),   sizeof(steps));
+        f.write(reinterpret_cast<const char*>(&epsilon), sizeof(epsilon));
+        policy_net.write_full(f);
+        target_net.write_full(f);
+        buffer.write(f, policy_net.in_size);
+    }
+
+    bool load_checkpoint(const std::string& path, int& episode) {
+        std::ifstream f(path, std::ios::binary);
+        if (!f) return false;
+        uint32_t magic = 0;
+        f.read(reinterpret_cast<char*>(&magic), sizeof(magic));
+        if (magic != MAGIC) return false;
+        f.read(reinterpret_cast<char*>(&episode), sizeof(episode));
+        f.read(reinterpret_cast<char*>(&steps),   sizeof(steps));
+        f.read(reinterpret_cast<char*>(&epsilon), sizeof(epsilon));
+        policy_net.read_full(f);
+        target_net.read_full(f);
+        buffer.read(f, policy_net.in_size);
+        return f.good();
+    }
 
     void train_step() {
         if (buffer.size() < batch_size) return;

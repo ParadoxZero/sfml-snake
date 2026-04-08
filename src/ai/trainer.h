@@ -62,27 +62,43 @@ inline void run_training(sf::RenderWindow& window) {
     game::GameController env(&window);
     dqn::DQNAgent agent(8, game::ACTION_COUNT);
 
-    constexpr int MAX_EPISODES   = 5000;
-    constexpr int MAX_STEPS      = 1000;
-    constexpr int AVG_WINDOW     = 50;   // rolling average window
-    constexpr int LOG_EVERY      = 50;   // console log frequency
+    constexpr int MAX_EPISODES    = 5000;
+    constexpr int MAX_STEPS       = 1000;
+    constexpr int AVG_WINDOW      = 50;
+    constexpr int LOG_EVERY       = 50;
+    constexpr int CHECKPOINT_EVERY = 100;
+    const std::string CKPT_PATH   = "snake_checkpoint.bin";
+    const std::string MODEL_PATH  = "snake_model.bin";
+
+    // ── Try to resume from checkpoint ─────────────────────────────────────────
+    int start_ep = 0;
+    if (agent.load_checkpoint(CKPT_PATH, start_ep)) {
+        std::cout << "Resumed from checkpoint at episode " << start_ep << "\n";
+    } else {
+        std::cout << "No checkpoint found, starting fresh.\n";
+    }
 
     std::vector<int> scores;
     float avg_score = 0.0f;
 
-    draw_ui(window, font, 0, MAX_EPISODES, 0.0f, agent.epsilon);
+    draw_ui(window, font, start_ep, MAX_EPISODES, 0.0f, agent.epsilon);
 
-    for (int ep = 0; ep < MAX_EPISODES; ep++) {
+    for (int ep = start_ep; ep < MAX_EPISODES; ep++) {
         env.reset();
         auto state = dqn::normalize_state(env.AI_GetState());
 
         int  food_count = 0;
         bool done       = false;
 
+        bool user_quit = false;
         for (int step = 0; step < MAX_STEPS && !done; step++) {
             sf::Event event;
-            while (window.pollEvent(event))
-                if (event.type == sf::Event::Closed) return;
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    user_quit = true;
+                }
+            }
+            if (user_quit) break;
 
             int action = agent.select_action(state);
             auto [raw_next, reward, next_done] = env.AI_HeadlessStep(action);
@@ -98,14 +114,13 @@ inline void run_training(sf::RenderWindow& window) {
 
         scores.push_back(food_count);
 
-        // Recompute rolling average
+        // Rolling average
         int n = std::min(AVG_WINDOW, (int)scores.size());
         avg_score = 0.0f;
         for (int i = (int)scores.size() - n; i < (int)scores.size(); i++)
             avg_score += scores[i];
         avg_score /= n;
 
-        // Update UI every episode so progress bar always moves
         draw_ui(window, font, ep + 1, MAX_EPISODES, avg_score, agent.epsilon);
 
         if ((ep + 1) % LOG_EVERY == 0) {
@@ -113,10 +128,26 @@ inline void run_training(sf::RenderWindow& window) {
                       << "  |  Avg score: " << std::fixed << std::setprecision(2) << avg_score
                       << "  |  epsilon: "   << std::setprecision(3) << agent.epsilon << "\n";
         }
+
+        // Auto-save checkpoint every N episodes
+        if ((ep + 1) % CHECKPOINT_EVERY == 0) {
+            agent.save_checkpoint(CKPT_PATH, ep + 1);
+            std::cout << "Checkpoint saved at episode " << ep + 1 << "\n";
+        }
+
+        // User closed window — save and exit
+        if (user_quit) {
+            agent.save_checkpoint(CKPT_PATH, ep + 1);
+            agent.save(MODEL_PATH);
+            std::cout << "Interrupted. Checkpoint saved at episode " << ep + 1 << "\n";
+            return;
+        }
     }
 
-    agent.save("snake_model.bin");
-    std::cout << "Training done. Model saved to snake_model.bin\n";
+    // Training complete
+    agent.save_checkpoint(CKPT_PATH, MAX_EPISODES);
+    agent.save(MODEL_PATH);
+    std::cout << "Training done. Model saved to " << MODEL_PATH << "\n";
 }
 
 // ─── AI Play ──────────────────────────────────────────────────────────────────
