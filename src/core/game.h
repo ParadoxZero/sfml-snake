@@ -24,6 +24,7 @@
 #include "snake.h"
 #include "ui/TipWindow.h"
 #include <SFML/Graphics.hpp>
+#include <functional>
 #include <list>
 #include <random>
 
@@ -52,11 +53,17 @@ enum MenuText {
 enum Fonts {
 
 };
+  // define AI array
+  using State = std::array<int, 8>;
+  // 状态向量，自己根据需要调整
+  static constexpr int ACTION_COUNT = 4; // 上下左右
 
 /*==================================================*
  *			The main game controller *
  *===================================================*/
 class GameController {
+
+
 public:
   /* Constructors */
   GameController(sf::RenderWindow *w);
@@ -64,9 +71,19 @@ public:
   /* Public methods */
   void start();
   void reset();
+  std::tuple<State, float, bool> Ai_Action_Step(int action);
+  // Headless step for AI training: advances game state without rendering
+  std::tuple<State, float, bool> AI_HeadlessStep(int action);
+  // Rendered game loop driven by an AI policy (for watching the trained agent)
+  void AI_GameLoop(std::function<int(State)> policy);
   /* methods to access the resources */
   sf::Font *getFont(Fonts font); // no definition yet
   bool loopInvarient;
+
+  //AI function
+  float AI_Reward();
+  State AI_GetState() ;
+  void AI_Move_Action(int action);
 private:
   void gameLoop();
   void setupScene();
@@ -78,6 +95,8 @@ private:
   sf::RenderWindow *screen;
   float scale;
   int score;
+  bool game_over;
+  bool food_ate;
 
   /* Resources that the controller retrieves from Disk */
   sf::Font fontList[3];

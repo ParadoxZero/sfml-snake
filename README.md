@@ -56,4 +56,5 @@ Feel free to fork, fix the issues and contribute. Help is always welcome.
 ## new features from lukas
 1. Add the game over menu
    * Now when game over, that will not return to the main menu directly.
+   * Attention: add the h file define in game_menu.h, otherwise there is a compile problem.
 2. Add the RL learning tools, AKA the AI mode.

@@ -21,7 +21,7 @@
 #define SS_UI_MAIN_MENU_H_
 
 #include <SFML/Graphics.hpp>
-#include <game_menu/game_menu.h>
+#include "ui/game_menu_compat.h"
 #include <memory>
 
 namespace game {

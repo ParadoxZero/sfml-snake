@@ -47,11 +47,13 @@ void game::Snake::drawSnake() {
   screen->draw(body[0]);
 }
 
+
+sf::RectangleShape game::Snake:: Get_Snake_loction() {
+  return body[0];
+}
 bool game::Snake::died() {
   int rv;
 
-  colorBody = sf::Color::Red ;
-  colorHead = sf::Color::Green;
   for (int i = BOX_SIZE / (movementScale / 10); i < snake_length; ++i) {
     if (checkCollision(body[0], body[i]))
       return true;
@@ -68,7 +70,58 @@ bool game::Snake::died() {
   }
    return rv;
 }
+// ai get the envirnoment around snake head
+bool game::Snake::Hit_Warning_AI(game::direction_base dir) {
 
+  bool rv = false;
+  //head location
+  int snake_x = body[0].getPosition().x, snake_y = body[0].getPosition().y;
+  //wall size
+  int wall_x = screen->getSize().x, wall_y = screen->getSize().y;
+  switch (dir) {
+    case game::Up:
+      for (int i = BOX_SIZE / (movementScale / 10); i < snake_length; ++i) {
+        if (snake_y < (body[i].getPosition().y - 10))
+          rv = true;
+      }
+      if ((snake_y - 10 < 0)) {
+        rv = true;
+      }
+      break;
+    case game::Down:
+      for (int i = BOX_SIZE / (movementScale / 10); i < snake_length; ++i) {
+        if (snake_y > (body[i].getPosition().y + 10))
+          rv = true;
+      }
+      if ((snake_y + 10 > wall_y)) {
+        rv = true;
+      }
+      break;
+    case game::Left:
+      for (int i = BOX_SIZE / (movementScale / 10); i < snake_length; ++i) {
+        if (snake_x < (body[i].getPosition().x - 10))
+          rv = true;
+      }
+      if ((snake_x - 10  < 0)) {
+        rv = true;
+      }
+      break;
+      break;
+    case game::Right:
+      for (int i = BOX_SIZE / (movementScale / 10); i < snake_length; ++i) {
+        if (snake_x > (body[i].getPosition().x + 10))
+          rv = true;
+      }
+      if ((snake_x + 10 > wall_x)) {
+        rv = true;
+      }
+      break;
+      default:
+      break;
+
+  }
+  return rv;
+}
 bool game::Snake::ateFood(Food *fd) {
   if (updateLegth) {
     snake_length++;

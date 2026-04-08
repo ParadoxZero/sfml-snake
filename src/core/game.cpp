@@ -18,7 +18,7 @@
  */
 
 #include "game.h"
-
+#include <array>
 #include <iostream>
 #include <memory>
 #include <random>
@@ -31,8 +31,9 @@ GameController::GameController(sf::RenderWindow *w) : snake(w) {
 }
   // snake location
   sf::Vector2<int> direction(-1, 0);
-  std::unique_ptr<Food> food;
-
+  std::unique_ptr<Food>  food;;
+  bool game_over = false;
+  bool food_ate = false;
   // game loop
 void GameController::start() {
   loadResources();
@@ -41,14 +42,15 @@ void GameController::start() {
 }
  void GameController::reset() {
   //food location init
-  std::unique_ptr<Food> food =
-    std::make_unique<Food>(screen, snake.getNextFoodLocation());
+  food = std::make_unique<Food>(screen, snake.getNextFoodLocation());
   direction.x = -1;
   direction.y = 0;
   score = 0;
   snake.snake_reset();
+  game_over = false;
+  food_ate = false;
 }
-
+// tip window generates
   TipWindow::win_val GameController::tipwindow_generate() {
 
   TipWindow::win_val rv;
@@ -94,8 +96,7 @@ void GameController::gameLoop() {
   bool loopInvarient = true;
 
   //food location get
-  std::unique_ptr<Food> food =
-    std::make_unique<Food>(screen, snake.getNextFoodLocation());
+   food = std::make_unique<Food>(screen, snake.getNextFoodLocation());
 // gameplay
   while (loopInvarient) {
     //snake draw
@@ -108,6 +109,8 @@ void GameController::gameLoop() {
     // game over
     if (snake.died()) {
       //loopInvarient = false;
+      game_over = true;
+
       TipWindow::win_val win_rv = this->tipwindow_generate();
       if (win_rv == TipWindow::Exit) {
         loopInvarient = false;
@@ -121,6 +124,7 @@ void GameController::gameLoop() {
     // get socre
     if (snake.ateFood(food.get())) {
       score++;
+      food_ate = true;
       food.reset(new Food(screen, snake.getNextFoodLocation()));
     }
 
@@ -154,4 +158,121 @@ void GameController::loadResources() {
 }
 sf::Font *GameController::getFont(Fonts font) { return &fontList[font]; }
 
+
+
+/******************AI function*****************/
+  float game::GameController::AI_Reward() {
+  if (game_over == true) return -10.0f;
+  if (food_ate == true) return 10.0f;
+  game::game_over = false;
+  game::food_ate = false;
+  return -0.01f; // 鼓励快速找到食物
+}
+  // AI move
+  void game::GameController::AI_Move_Action(int action) {
+  switch(action) {
+    case 0:
+      direction.y = -1;
+      direction.x = 0; break;
+    case 1:
+      direction.y = 1;
+      direction.x = 0;break;
+    case 2:
+      direction.x = -1;
+      direction.y = 0;break;
+    case 3:
+      direction.x = 1;
+      direction.y = 0;break;
+  }
+}
+
+
+  // 提取状态向量
+  State game::GameController::AI_GetState() {
+  State s{};
+
+  auto head_for_ai = snake.Get_Snake_loction();
+  auto food_for_ai = food->getFood();
+
+  s[0] = head_for_ai.getPosition().x;
+  s[1] = head_for_ai.getPosition().y;
+  s[2] = food_for_ai.getPosition().x;
+  s[3] = food_for_ai.getPosition().y;
+
+  // 蛇头周围是否有墙或自己
+  s[4] = snake.Hit_Warning_AI(Up); // 上
+  s[5] = snake.Hit_Warning_AI(Down); // 下
+  s[6] = snake.Hit_Warning_AI(Left); // 左
+  s[7] = snake.Hit_Warning_AI(Right); // 右
+  return s;
+}
+
+  // 执行动作并返回 (next_state, reward, done)
+  std::tuple<State, float, bool> game::GameController::Ai_Action_Step(int action) {
+  AI_Move_Action(action);
+  float reward = AI_Reward();
+  bool done = game_over;
+  return { AI_GetState(), reward, done };
+}
+  // Rendered game loop driven by an AI policy — call this to watch the trained agent play.
+  void GameController::AI_GameLoop(std::function<int(State)> policy) {
+    reset();
+    screen->setFramerateLimit(10); // slow enough to watch
+
+    while (true) {
+      // Poll events
+      sf::Event event;
+      while (screen->pollEvent(event))
+        if (event.type == sf::Event::Closed) return;
+
+      // Render
+      setupScene();
+      food->drawFood();
+      screen->display();
+
+      // AI decides action
+      int action = policy(AI_GetState());
+      AI_Move_Action(action);
+      snake.moveSnake(direction);
+
+      game_over = snake.died();
+      food_ate  = false;
+      if (!game_over && snake.ateFood(food.get())) {
+        score++;
+        food_ate = true;
+        food.reset(new Food(screen, snake.getNextFoodLocation()));
+      }
+
+      if (game_over) {
+        // Brief pause then restart
+        sf::sleep(sf::seconds(0.8f));
+        reset();
+      }
+    }
+  }
+
+  // Headless step: moves the snake, checks collisions/food, returns (state, reward, done).
+  // Does not render anything — safe to call in a tight training loop.
+  std::tuple<State, float, bool> GameController::AI_HeadlessStep(int action) {
+    AI_Move_Action(action);
+    snake.moveSnake(direction);
+
+    game_over = snake.died();
+    food_ate  = false;
+
+    if (!game_over && snake.ateFood(food.get())) {
+      score++;
+      food_ate = true;
+      food.reset(new Food(screen, snake.getNextFoodLocation()));
+    }
+
+    float reward = game_over ? -10.0f : (food_ate ? 10.0f : -0.01f);
+    bool  done   = game_over;
+    State next   = done ? State{} : AI_GetState();
+
+    return { next, reward, done };
+  }
+
 } // namespace game
+
+

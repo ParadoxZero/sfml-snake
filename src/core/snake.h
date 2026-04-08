@@ -29,7 +29,7 @@
 #define SNAKE_MAX_LENGTH 2000
 
 namespace game {
-
+  enum direction_base {Up = 0, Down, Left, Right};
 class Random {
   /* A utility class that will be used to generate random numbers */
   std::random_device rd;
@@ -56,8 +56,9 @@ public:
   bool ateFood(Food *fd);
   void moveSnake(sf::Vector2<int> direction);
   void snake_reset();
+  bool Hit_Warning_AI(game::direction_base dir);
   sf::Vector2f getNextFoodLocation();
-
+  sf::RectangleShape Get_Snake_loction();
 private:
   sf::RenderWindow *screen;
   Random rand;

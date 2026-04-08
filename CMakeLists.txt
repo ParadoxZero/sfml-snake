@@ -29,40 +29,59 @@ FetchContent_Declare(gamemenu
     GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(gamemenu)
 
-FetchContent_Declare(rltools
-        GIT_REPOSITORY https://github.com/rl-tools/rl-tools.git
-        GIT_TAG v2.2.0
-        GIT_SHALLOW TRUE)
-FetchContent_MakeAvailable(rltools)
-set(SOURCE_FILES 
-"src/main.cpp"
-"src/ui/MainMenu.cpp"
-"src/ui/MainMenu.h"
-"src/core/engine.h"
-"src/core/food.h"
-"src/core/food.cpp"
-"src/core/snake.h"
-"src/core/snake.cpp"
-"src/core/game.h"
-"src/core/game.cpp"
-        src/ui/TipWindow.cpp
-        src/ui/TipWindow.h
+set(GAME_CORE_FILES
+    "src/ui/MainMenu.cpp"
+    "src/ui/MainMenu.h"
+    "src/core/engine.h"
+    "src/core/food.h"
+    "src/core/food.cpp"
+    "src/core/snake.h"
+    "src/core/snake.cpp"
+    "src/core/game.h"
+    "src/core/game.cpp"
+    "src/ui/TipWindow.cpp"
+    "src/ui/TipWindow.h"
+    "src/core/game_ai_action.cpp"
+    "src/core/game_ai_action.h"
 )
 
+# trainer doesn't need MainMenu (avoids game_menu.h double-include issue)
+set(TRAIN_CORE_FILES
+    "src/core/engine.h"
+    "src/core/food.h"
+    "src/core/food.cpp"
+    "src/core/snake.h"
+    "src/core/snake.cpp"
+    "src/core/game.h"
+    "src/core/game.cpp"
+    "src/ui/TipWindow.cpp"
+    "src/ui/TipWindow.h"
+    "src/core/game_ai_action.cpp"
+    "src/core/game_ai_action.h"
+)
+
+# ── Main game ──────────────────────────────────────────────────────────────────
 if(WIN32)
-    add_executable(snake WIN32 ${SOURCE_FILES})
+    add_executable(snake WIN32 "src/main.cpp" ${GAME_CORE_FILES})
 else()
-    add_executable(snake ${SOURCE_FILES})
+    add_executable(snake "src/main.cpp" ${GAME_CORE_FILES})
 endif()
 
 target_link_libraries(snake PRIVATE sfml-graphics gamemenu)
 target_compile_features(snake PRIVATE cxx_std_17)
 target_include_directories(snake PRIVATE src)
 
+# ── AI trainer (headless training loop) ───────────────────────────────────────
+add_executable(snake_train "src/ai/train_main.cpp" ${TRAIN_CORE_FILES})
+target_link_libraries(snake_train PRIVATE sfml-graphics gamemenu)
+target_compile_features(snake_train PRIVATE cxx_std_17)
+target_include_directories(snake_train PRIVATE src)
+
 add_custom_target(copy_menu_font
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/sansation.ttf ${CMAKE_BINARY_DIR}
 )
 add_dependencies(snake copy_menu_font)
+add_dependencies(snake_train copy_menu_font)
 
 if(WIN32)
     add_custom_command(

@@ -5,7 +5,7 @@
 #ifndef TIPWINDOW_H
 #define TIPWINDOW_H
 #include <SFML/Graphics.hpp>
-#include <game_menu/game_menu.h>
+#include "ui/game_menu_compat.h"
 
 namespace  game{
 
