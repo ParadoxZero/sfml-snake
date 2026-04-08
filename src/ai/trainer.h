@@ -6,29 +6,38 @@
 #include <iomanip>
 #include <sstream>
 #include <vector>
+#include <cstdio>
 
 namespace ai_trainer {
+
+// ─── UI helpers ───────────────────────────────────────────────────────────────
+
+static const sf::FloatRect RESET_BTN(560, 700, 160, 44);
 
 inline void draw_ui(sf::RenderWindow& window, sf::Font& font,
                     int ep, int max_ep, float avg_score, float epsilon) {
     window.clear(sf::Color(20, 20, 30));
 
+    // Title
     sf::Text title("AI Training in Progress", font, 32);
     title.setFillColor(sf::Color(100, 220, 100));
     title.setPosition(80, 60);
     window.draw(title);
 
-    float bar_w = 640.f;
-    sf::RectangleShape bar_bg(sf::Vector2f(bar_w, 24));
+    // Progress bar background
+    sf::RectangleShape bar_bg(sf::Vector2f(640.f, 24));
     bar_bg.setPosition(80, 130);
     bar_bg.setFillColor(sf::Color(60, 60, 80));
     window.draw(bar_bg);
 
-    sf::RectangleShape bar_fill(sf::Vector2f(bar_w * ep / max_ep, 24));
+    // Progress bar fill
+    float fill = (max_ep > 0) ? 640.f * ep / max_ep : 0.f;
+    sf::RectangleShape bar_fill(sf::Vector2f(fill, 24));
     bar_fill.setPosition(80, 130);
     bar_fill.setFillColor(sf::Color(80, 160, 255));
     window.draw(bar_fill);
 
+    // Stats
     auto draw_text = [&](const std::string& s, float x, float y,
                          sf::Color c = sf::Color::White) {
         sf::Text t(s, font, 24);
@@ -51,27 +60,46 @@ inline void draw_ui(sf::RenderWindow& window, sf::Font& font,
     draw_text(oss.str(), 80, 260,
               sf::Color(epsilon > 0.5f ? 255 : 100, 200, 100));
 
-    draw_text("Close window to stop training.", 80, 740, sf::Color(150, 150, 150));
+    draw_text("Press ESC to pause & return to menu.", 80, 750, sf::Color(150, 150, 150));
+
+    // Reset button
+    sf::RectangleShape btn(sf::Vector2f(RESET_BTN.width, RESET_BTN.height));
+    btn.setPosition(RESET_BTN.left, RESET_BTN.top);
+    btn.setFillColor(sf::Color(180, 50, 50));
+    btn.setOutlineColor(sf::Color(240, 80, 80));
+    btn.setOutlineThickness(2);
+    window.draw(btn);
+
+    sf::Text btn_label("Reset Training", font, 20);
+    btn_label.setFillColor(sf::Color::White);
+    btn_label.setPosition(RESET_BTN.left + 8, RESET_BTN.top + 10);
+    window.draw(btn_label);
+
     window.display();
 }
+
+// ─── Training loop ────────────────────────────────────────────────────────────
 
 inline void run_training(sf::RenderWindow& window) {
     sf::Font font;
     font.loadFromFile("sansation.ttf");
 
-    game::GameController env(&window);
-    dqn::DQNAgent agent(8, game::ACTION_COUNT);
-
-    constexpr int MAX_EPISODES    = 5000;
-    constexpr int MAX_STEPS       = 1000;
-    constexpr int AVG_WINDOW      = 50;
-    constexpr int LOG_EVERY       = 50;
+    constexpr int MAX_EPISODES     = 5000;
+    constexpr int MAX_STEPS        = 1000;
+    constexpr int AVG_WINDOW       = 50;
+    constexpr int LOG_EVERY        = 50;
     constexpr int CHECKPOINT_EVERY = 100;
-    const std::string CKPT_PATH   = "snake_checkpoint.bin";
-    const std::string MODEL_PATH  = "snake_model.bin";
+    const std::string CKPT_PATH    = "snake_checkpoint.bin";
+    const std::string MODEL_PATH   = "snake_model.bin";
 
-    // ── Try to resume from checkpoint ─────────────────────────────────────────
+    // Lambda to initialise a fresh agent + episode counter
+    auto make_agent = []() {
+        return dqn::DQNAgent(8, game::ACTION_COUNT);
+    };
+
+    dqn::DQNAgent agent = make_agent();
     int start_ep = 0;
+
     if (agent.load_checkpoint(CKPT_PATH, start_ep)) {
         std::cout << "Resumed from checkpoint at episode " << start_ep << "\n";
     } else {
@@ -83,22 +111,38 @@ inline void run_training(sf::RenderWindow& window) {
 
     draw_ui(window, font, start_ep, MAX_EPISODES, 0.0f, agent.epsilon);
 
-    for (int ep = start_ep; ep < MAX_EPISODES; ep++) {
+    game::GameController env(&window);
+
+    int ep = start_ep;
+    while (ep < MAX_EPISODES) {
         env.reset();
         auto state = dqn::normalize_state(env.AI_GetState());
 
         int  food_count = 0;
         bool done       = false;
+        bool user_quit  = false;
+        bool user_reset = false;
 
-        bool user_quit = false;
         for (int step = 0; step < MAX_STEPS && !done; step++) {
             sf::Event event;
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed) {
                     user_quit = true;
                 }
+                if (event.type == sf::Event::KeyPressed &&
+                    event.key.code == sf::Keyboard::Escape) {
+                    user_quit = true;
+                }
+                if (event.type == sf::Event::MouseButtonPressed &&
+                    event.mouseButton.button == sf::Mouse::Left) {
+                    float mx = (float)event.mouseButton.x;
+                    float my = (float)event.mouseButton.y;
+                    if (RESET_BTN.contains(mx, my)) {
+                        user_reset = true;
+                    }
+                }
             }
-            if (user_quit) break;
+            if (user_quit || user_reset) break;
 
             int action = agent.select_action(state);
             auto [raw_next, reward, next_done] = env.AI_HeadlessStep(action);
@@ -112,6 +156,28 @@ inline void run_training(sf::RenderWindow& window) {
             done  = next_done;
         }
 
+        // ── Handle reset ──────────────────────────────────────────────────────
+        if (user_reset) {
+            std::remove(CKPT_PATH.c_str());
+            std::remove(MODEL_PATH.c_str());
+            agent    = make_agent();
+            start_ep = 0;
+            ep       = 0;
+            scores.clear();
+            avg_score = 0.0f;
+            std::cout << "Training reset.\n";
+            draw_ui(window, font, 0, MAX_EPISODES, 0.0f, agent.epsilon);
+            continue;
+        }
+
+        // ── Handle ESC / window close — save current ep (not ep+1) ───────────
+        if (user_quit) {
+            agent.save_checkpoint(CKPT_PATH, ep); // ep not yet completed → resume from ep
+            agent.save(MODEL_PATH);
+            std::cout << "Paused. Checkpoint saved at episode " << ep << "\n";
+            return;
+        }
+
         scores.push_back(food_count);
 
         // Rolling average
@@ -121,26 +187,18 @@ inline void run_training(sf::RenderWindow& window) {
             avg_score += scores[i];
         avg_score /= n;
 
-        draw_ui(window, font, ep + 1, MAX_EPISODES, avg_score, agent.epsilon);
+        ep++;
+        draw_ui(window, font, ep, MAX_EPISODES, avg_score, agent.epsilon);
 
-        if ((ep + 1) % LOG_EVERY == 0) {
-            std::cout << "Episode " << std::setw(5) << ep + 1
+        if (ep % LOG_EVERY == 0) {
+            std::cout << "Episode " << std::setw(5) << ep
                       << "  |  Avg score: " << std::fixed << std::setprecision(2) << avg_score
                       << "  |  epsilon: "   << std::setprecision(3) << agent.epsilon << "\n";
         }
 
-        // Auto-save checkpoint every N episodes
-        if ((ep + 1) % CHECKPOINT_EVERY == 0) {
-            agent.save_checkpoint(CKPT_PATH, ep + 1);
-            std::cout << "Checkpoint saved at episode " << ep + 1 << "\n";
-        }
-
-        // User closed window — save and exit
-        if (user_quit) {
-            agent.save_checkpoint(CKPT_PATH, ep + 1);
-            agent.save(MODEL_PATH);
-            std::cout << "Interrupted. Checkpoint saved at episode " << ep + 1 << "\n";
-            return;
+        if (ep % CHECKPOINT_EVERY == 0) {
+            agent.save_checkpoint(CKPT_PATH, ep);
+            std::cout << "Checkpoint saved at episode " << ep << "\n";
         }
     }
 
